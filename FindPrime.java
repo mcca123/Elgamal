@@ -1,5 +1,6 @@
 import java.io.File; // Import the File class
 import java.io.FileNotFoundException; // Import this class to handle errors
+import java.util.Map;
 import java.util.Scanner; // Import the Scanner class to read text files
 
 public class FindPrime {
@@ -43,6 +44,16 @@ public class FindPrime {
             else
                 decimal += 2;
         }
+        System.out.println("Safeprime :" + decimal);
+        long keygen = KeyGen.KeyGenerator(decimal);
+        System.out.println("key Generator is " + keygen);
+        Map<String, Long> key = KeyGen.GenKey(keygen, decimal);
+        System.out.println("==Public Key==");
+        System.out.println("g :" + key.get("g"));
+        System.out.println("p :" + key.get("p"));
+        System.out.println("y :" + key.get("y"));
+        System.out.println("==Private Key==");
+        System.out.println("u :" + key.get("u"));
 
     }
 
@@ -162,7 +173,7 @@ public class FindPrime {
         for (int i = 1; i <= 100; i++) {
             // random a
             a = leftLimit + (long) (Math.random() * (rightLimit - leftLimit));
-
+            // System.out.println("result"+fastExponent(a, (n - 1) / 2, n));
             if (n / a == 0) {
                 isPrime = false;
             } else {
@@ -205,15 +216,20 @@ public class FindPrime {
 
     public static long fastExponent(long base, long expo, long mod) {
         // find power
+
         long result = 1;
         while (expo > 0) {
-            // if odd
-            if (expo % 2 != 0) {
+            // if last bit is 0
+            if ((expo & 1) != 0) {
                 result = (result * base) % mod;
             }
-            base = base * base % mod;
+
+            // base = fastExponent(base % mod, 2, mod) % mod;
+            base = /* (base*base) % mod; */((base % mod) * (base % mod)) % mod;
             expo = expo >> 1;
+
         }
+
         return result;
     }
 }
