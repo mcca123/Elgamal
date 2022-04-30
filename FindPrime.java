@@ -48,12 +48,12 @@ public class FindPrime {
         long keygen = KeyGen.KeyGenerator(decimal);
         System.out.println("key Generator is " + keygen);
         Map<String, Long> key = KeyGen.GenKey(keygen, decimal);
-        System.out.println("==Public Key==");
-        System.out.println("g :" + key.get("g"));
-        System.out.println("p :" + key.get("p"));
-        System.out.println("y :" + key.get("y"));
-        System.out.println("==Private Key==");
-        System.out.println("u :" + key.get("u"));
+        System.out.println("g :" + key.get("g"));// both
+        System.out.println("p :" + key.get("p"));// both
+        System.out.println("y :" + key.get("y"));// public
+        System.out.println("u :" + key.get("u"));// private
+        // g p y-->public file
+        // g p u-->private file
 
     }
 
@@ -174,16 +174,16 @@ public class FindPrime {
             // random a
             a = leftLimit + (long) (Math.random() * (rightLimit - leftLimit));
             // System.out.println("result"+fastExponent(a, (n - 1) / 2, n));
-            if (n / a == 0) {
+            if (gcd(a, n) > 1) {
                 isPrime = false;
+                break;
+            } else if (fastExponent(a, (n - 1) / 2, n) == 1 || fastExponent(a, (n - 1) / 2, n) == n - 1) {
+                isPrime = true;
             } else {
-                if (gcd(a, n) > 1) {
-                    isPrime = false;
-                } else if (fastExponent(a, (n - 1) / 2, n) == 1 || fastExponent(a, (n - 1) / 2, n) == n - 1) {
-                    isPrime = true;
-                } else
-                    isPrime = false;
+                isPrime = false;
+                break;
             }
+
         }
 
         return isPrime;
@@ -225,7 +225,7 @@ public class FindPrime {
             }
 
             // base = fastExponent(base % mod, 2, mod) % mod;
-            base = /* (base*base) % mod; */((base % mod) * (base % mod)) % mod;
+            base = (base * base) % mod;
             expo = expo >> 1;
 
         }
