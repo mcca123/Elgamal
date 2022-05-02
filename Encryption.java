@@ -6,7 +6,7 @@ public class Encryption {
         // System.out.println("ran: " + generatedLong);
         // long r = Math.abs(generatedLong);
         // System.out.println("ran po: " + r);
-        long x = 150;
+        long x = 563;
         long[] cipher = encryption(563, 128, 389, x);
         System.out.println("a :" + cipher[0]);
         System.out.println("b :" + cipher[1]);

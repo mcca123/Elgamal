@@ -6,7 +6,7 @@ import java.util.Map;
 public class KeyGen {
     public static void main(String[] args) {
         System.out.println("==KEY GENERATOR==");
-        long p = 11L;
+        long p = 563L;
         long keygen = KeyGenerator(p);
         Map<String, Long> key = GenKey(keygen, p);
         Map<String, String> keyBinary = KeyTobinary(key);
