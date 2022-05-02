@@ -2,6 +2,10 @@ import java.io.File; // Import the File class
 import java.io.FileNotFoundException; // Import this class to handle errors
 import java.util.Map;
 import java.util.Scanner; // Import the Scanner class to read text files
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class FindPrime {
     static Scanner sc = new Scanner(System.in);
@@ -17,14 +21,29 @@ public class FindPrime {
         getInput();
 
         System.out.println("===Result===");
-
         String content = readFile(filename);
-
         printResult("Content is -> " + content);
-
         String binaryResult = convertStringToBinary(content);
+
+        //store binary Length
+        int keyLength = binaryResult.length();
+        System.out.println("keyLength : " + keyLength);
+
         printResult(binaryResult);
+
+        //block Size => " " 
+        int blockSize = 7 ;
+
+
+        
+        //convertStringToArray
+        String [] plaintextString = printPrettyBinary(binaryResult,blockSize);
         char[] ch = convertStringToArray(binaryResult);
+
+        //padding
+        String [] pad = padding(plaintextString,blockSize);
+        System.out.println("padding : " + Arrays.toString(pad));
+
         long decimal = convertStringBinaryToDecimal(selectBit(ch));
         printResult("base 10 : " + decimal);
         while (true) {
@@ -48,14 +67,42 @@ public class FindPrime {
         long keygen = KeyGen.KeyGenerator(decimal);
         System.out.println("key Generator is " + keygen);
         Map<String, Long> key = KeyGen.GenKey(keygen, decimal);
-        System.out.println("g :" + key.get("g"));// both
-        System.out.println("p :" + key.get("p"));// both
-        System.out.println("y :" + key.get("y"));// public
-        System.out.println("u :" + key.get("u"));// private
-        // g p y-->public file
-        // g p u-->private file
+        System.out.println("==Public Key==");
+        System.out.println("g :" + key.get("g"));
+        System.out.println("p :" + key.get("p"));
+        System.out.println("y :" + key.get("y"));
+        System.out.println("==Private Key==");
+        System.out.println("u :" + key.get("u"));
 
     }
+
+    //Print Result Binary divide by 8 for beautiful
+    public static String[] printPrettyBinary(String text,int blockSize){
+
+        String k = prettyBinary(text, blockSize, " ");
+        //split sting by " " fot covent to Array
+        String[] plaintextString = k.split(" ");
+        System.out.println("conent string to Long array : " + Arrays.toString(plaintextString));
+        
+        return plaintextString;  
+    }
+
+    public static String[] padding(String plaintextString[] , int blockSize) {
+        
+        for (int i = 0; i < plaintextString.length; i++) {
+            if(plaintextString[i].length() < blockSize){
+                int temp = blockSize - plaintextString[i].length();
+                for (int j = 0; j < temp; j++) {
+                    StringBuilder pad = new StringBuilder(plaintextString[i]);
+                    pad.append("0");
+                    plaintextString[i] = pad.toString();
+                }
+            }
+        }
+
+        return plaintextString;
+    }
+
 
     public static void printResult(String text) {
         // print text
@@ -75,6 +122,19 @@ public class FindPrime {
         }
         return result.toString();
 
+    }
+
+    public static String prettyBinary(String binary, int blockSize, String separator) {
+        List<String> result = new ArrayList<>();
+        int index = 0;
+  
+        //
+        while (index < binary.length()) {
+            result.add(binary.substring(index, Math.min(index + blockSize, binary.length())));
+            index += blockSize;
+        }
+  
+        return result.stream().collect(Collectors.joining(separator));
     }
 
     public static String readFile(String filename) {
@@ -174,16 +234,16 @@ public class FindPrime {
             // random a
             a = leftLimit + (long) (Math.random() * (rightLimit - leftLimit));
             // System.out.println("result"+fastExponent(a, (n - 1) / 2, n));
-            if (gcd(a, n) > 1) {
+            if (n / a == 0) {
                 isPrime = false;
-                break;
-            } else if (fastExponent(a, (n - 1) / 2, n) == 1 || fastExponent(a, (n - 1) / 2, n) == n - 1) {
-                isPrime = true;
             } else {
-                isPrime = false;
-                break;
+                if (gcd(a, n) > 1) {
+                    isPrime = false;
+                } else if (fastExponent(a, (n - 1) / 2, n) == 1 || fastExponent(a, (n - 1) / 2, n) == n - 1) {
+                    isPrime = true;
+                } else
+                    isPrime = false;
             }
-
         }
 
         return isPrime;
@@ -225,7 +285,7 @@ public class FindPrime {
             }
 
             // base = fastExponent(base % mod, 2, mod) % mod;
-            base = (base * base) % mod;
+            base = /* (base*base) % mod; */((base % mod) * (base % mod)) % mod;
             expo = expo >> 1;
 
         }
