@@ -9,9 +9,9 @@ public class KeyGen {
         long p = 563L;
         long keygen = KeyGenerator(p);
         Map<String, Long> key = GenKey(keygen, p);
-        Map<String, String> keyBinary = KeyTobinary(key);
-        TextFliePublicKey(keyBinary);
-        TextFliePrivateKey(keyBinary);
+        //Map<String, String> keyBinary = KeyTobinary(key);
+        TextFliePublicKey(key);
+        TextFliePrivateKey(key);
 
     }
 
@@ -23,11 +23,10 @@ public class KeyGen {
         long a = leftLimit + (long) (Math.random() * (rightLimit - leftLimit));
         System.out.println("a: " + a);
 
-        
         System.out.println(a + "^" + (p - 1) / 2 + "%" + p + " = " + FindPrime.fastExponent(a, (p - 1) / 2, p));
         if (FindPrime.fastExponent(a, (p - 1) / 2, p) != 1 % p) {
 
-            System.out.println( a + " is key generator");
+            System.out.println(a + " is key generator");
         } else {
             System.out.println("-" + a + " % " + p + " is key generator");
             a = p + ((a * (-1)) % p);
@@ -43,7 +42,7 @@ public class KeyGen {
     public static Map<String, Long> GenKey(long g, long p) {
         System.out.println("Generate Key");
         long leftLimit = 1L;
-        long rightLimit = p;
+        long rightLimit = p - 1;
         long u = leftLimit + (long) (Math.random() * (rightLimit - leftLimit));
         Map<String, Long> key = new HashMap<>();
 
@@ -54,55 +53,55 @@ public class KeyGen {
         key.put("y", y);
         key.put("u", u);
 
-        System.out.println("p :" + key.get("p"));
-        System.out.println("g :" + key.get("g"));
-        System.out.println("y :" + key.get("y"));
-        System.out.println("u :" + key.get("u"));
+        // System.out.println("p :" + key.get("p"));
+        // System.out.println("g :" + key.get("g"));
+        // System.out.println("y :" + key.get("y"));
+        // System.out.println("u :" + key.get("u"));
 
         return key;
 
     }
 
-    //covent to text file public Key
-    public static void TextFliePublicKey(Map<String, String> keyBinary){
+    // convert to text file public Key
+    public static void TextFliePublicKey(Map<String, Long> key) {
         String fileNamePublic = "publicKey.txt";
-        
+
         PrintWriter writerPublic = null;
-        
-        try{
+
+        try {
             writerPublic = new PrintWriter(fileNamePublic);
-        }catch (FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
         writerPublic.flush();
-        writerPublic.append(keyBinary.get("p") + " ");
-        writerPublic.append(keyBinary.get("g") + " ");
-        writerPublic.append(keyBinary.get("y") + " ");
+        writerPublic.append(key.get("p") + " ");
+        writerPublic.append(key.get("g") + " ");
+        writerPublic.append(key.get("y") + " ");
         writerPublic.close();
     }
-    
-    //covent to text file private Key
-    public static void TextFliePrivateKey(Map<String, String> keyBinary){
+
+    // covent to text file private Key
+    public static void TextFliePrivateKey(Map<String, Long> key) {
         String fileNameSecret = "privateKey.txt";
 
         PrintWriter writerSecret = null;
-        
-        try{
+
+        try {
             writerSecret = new PrintWriter(fileNameSecret);
-        }catch (FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
         writerSecret.flush();
-        writerSecret.append(keyBinary.get("p") + " ");
-        writerSecret.append(keyBinary.get("g") + " ");
-        writerSecret.append(keyBinary.get("u") + " ");
+        writerSecret.append(key.get("p") + " ");
+        writerSecret.append(key.get("g") + " ");
+        writerSecret.append(key.get("u") + " ");
         writerSecret.close();
     }
 
-    public static Map<String, String> KeyTobinary(Map<String, Long> key){
-            
+    public static Map<String, String> KeyTobinary(Map<String, Long> key) {
+
         Map<String, String> keyBinary = new HashMap<>();
 
         keyBinary.put("p", Long.toBinaryString(key.get("p")));

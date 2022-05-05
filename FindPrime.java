@@ -25,27 +25,29 @@ public class FindPrime {
         printResult("Content is -> " + content);
         String binaryResult = convertStringToBinary(content);
 
-        //store binary Length
-        int keyLength = binaryResult.length();
-        System.out.println("keyLength : " + keyLength);
+        // store binary Length
+        int textLength = binaryResult.length();
+        System.out.println("keyLength : " + textLength);
 
         printResult(binaryResult);
 
-        //block Size => " " 
-        int blockSize = 7 ;
+        // block Size => " "
+        // long blockSize = (long) (Math.log(bit)/Math.log(2));
+        // System.out.println("block size : "+blockSize);
 
+        // convertStringToArray
+        // String [] plaintextString = printPrettyBinary(binaryResult,blockSize);
+        char[] charBinary = convertStringToArray(binaryResult);
 
-        
-        //convertStringToArray
-        String [] plaintextString = printPrettyBinary(binaryResult,blockSize);
-        char[] ch = convertStringToArray(binaryResult);
+        // //padding
+        // String [] pad = padding(plaintextString,blockSize);
+        // System.out.println("padding : " + Arrays.toString(pad));
 
-        //padding
-        String [] pad = padding(plaintextString,blockSize);
-        System.out.println("padding : " + Arrays.toString(pad));
+        long decimal = convertStringBinaryToDecimal(selectBit(charBinary));
+        System.out.println("bit: " + bit);
 
-        long decimal = convertStringBinaryToDecimal(selectBit(ch));
         printResult("base 10 : " + decimal);
+        // long safePrime = findSafePrime(decimal);
         while (true) {
             System.out.println("find prime of " + decimal);
             if (findPrime(decimal)) {
@@ -63,46 +65,23 @@ public class FindPrime {
             else
                 decimal += 2;
         }
+        // System.out.println("Safeprime :" + safePrime);
         System.out.println("Safeprime :" + decimal);
-        long keygen = KeyGen.KeyGenerator(decimal);
-        System.out.println("key Generator is " + keygen);
-        Map<String, Long> key = KeyGen.GenKey(keygen, decimal);
-        System.out.println("==Public Key==");
-        System.out.println("g :" + key.get("g"));
-        System.out.println("p :" + key.get("p"));
-        System.out.println("y :" + key.get("y"));
-        System.out.println("==Private Key==");
-        System.out.println("u :" + key.get("u"));
+        // long keygen = KeyGen.KeyGenerator(decimal);
+        // System.out.println("key Generator is " + keygen);
+        // Map<String, Long> key = KeyGen.GenKey(keygen, decimal);
+        // System.out.println("==Public Key==");
+        // System.out.println("g :" + key.get("g"));
+        // System.out.println("p :" + key.get("p"));
+        // System.out.println("y :" + key.get("y"));
+        // System.out.println("==Private Key==");
+        // System.out.println("u :" + key.get("u"));
 
     }
 
-    //Print Result Binary divide by 8 for beautiful
-    public static String[] printPrettyBinary(String text,int blockSize){
+   
 
-        String k = prettyBinary(text, blockSize, " ");
-        //split sting by " " fot covent to Array
-        String[] plaintextString = k.split(" ");
-        System.out.println("conent string to Long array : " + Arrays.toString(plaintextString));
-        
-        return plaintextString;  
-    }
-
-    public static String[] padding(String plaintextString[] , int blockSize) {
-        
-        for (int i = 0; i < plaintextString.length; i++) {
-            if(plaintextString[i].length() < blockSize){
-                int temp = blockSize - plaintextString[i].length();
-                for (int j = 0; j < temp; j++) {
-                    StringBuilder pad = new StringBuilder(plaintextString[i]);
-                    pad.append("0");
-                    plaintextString[i] = pad.toString();
-                }
-            }
-        }
-
-        return plaintextString;
-    }
-
+    
 
     public static void printResult(String text) {
         // print text
@@ -124,18 +103,7 @@ public class FindPrime {
 
     }
 
-    public static String prettyBinary(String binary, int blockSize, String separator) {
-        List<String> result = new ArrayList<>();
-        int index = 0;
-  
-        //
-        while (index < binary.length()) {
-            result.add(binary.substring(index, Math.min(index + blockSize, binary.length())));
-            index += blockSize;
-        }
-  
-        return result.stream().collect(Collectors.joining(separator));
-    }
+    
 
     public static String readFile(String filename) {
         String data = "";
@@ -236,18 +204,43 @@ public class FindPrime {
             // System.out.println("result"+fastExponent(a, (n - 1) / 2, n));
             if (n / a == 0) {
                 isPrime = false;
+                break;
             } else {
                 if (gcd(a, n) > 1) {
                     isPrime = false;
+                    break;
                 } else if (fastExponent(a, (n - 1) / 2, n) == 1 || fastExponent(a, (n - 1) / 2, n) == n - 1) {
                     isPrime = true;
-                } else
+                } else {
                     isPrime = false;
+                    break;
+                }
             }
         }
 
         return isPrime;
 
+    }
+
+    public static long findSafePrime(long decimal) {
+        while (true) {
+            System.out.println("find prime of " + decimal);
+            if (findPrime(decimal)) {
+                System.out.print(decimal + " is prime");
+                if (findPrime((decimal - 1) / 2)) {
+                    System.out.println(" and safe prime");
+                    break;
+                } else
+                    System.out.println(" but not safe prime");
+            } else {
+                System.out.println(decimal + " is not prime");
+            }
+            if (decimal % 2 == 0)
+                decimal += 1;
+            else
+                decimal += 2;
+        }
+        return decimal;
     }
 
     public static long gcd(long n1, long n2) {
