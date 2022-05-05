@@ -3,6 +3,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -27,7 +28,7 @@ public class Encryption {
         // long plaintext = decryption(p, g, u, cipher[0], cipher[1]);
         // System.out.println("plain text: " + plaintext);
 
-        //long [] Bplain = {0001,1110,1010,1100};
+        // long [] Bplain = {0001,1110,1010,1100};
         long[] plain = { 10, 23, 27, 16, 5 };
         String cipherText = encryption(plain, "publicKey.txt");
         System.out.println("Cipher: " + cipherText);
@@ -66,14 +67,14 @@ public class Encryption {
         System.out.println(Arrays.toString(plaintext));
 
         long[] key = Stream.of(keyString).mapToLong(Long::parseLong).toArray();
-       // System.out.println(Arrays.toString(keyString));
-        //System.out.println(Arrays.toString(key));
+        // System.out.println(Arrays.toString(keyString));
+        // System.out.println(Arrays.toString(key));
 
         for (int i = 0; i < plaintext.length; i++) {
             long k = 0;
             while (FindPrime.gcd(k, key[0] - 1) != 1) {
                 k = 1 + (long) (Math.random() * (key[0]));
-                //System.out.println("k: " + k);
+                // System.out.println("k: " + k);
             }
 
             long a = FindPrime.fastExponent(key[1], k, key[0]);
@@ -91,24 +92,33 @@ public class Encryption {
 
     }
 
-    public static long[] decryption(String cipherText, String keyfile) {
+    public static String[] decryption(String cipherText, String keyfile) {
         // String[] keyString = FindPrime.readFile(keyFile).split(" ");
         String[] cipherArray = FindPrime.readFile(cipherText).split(" ");
         long[] cipherArrayL = Stream.of(cipherArray).mapToLong(Long::parseLong).toArray();
         System.out.println("cipher text : " + Arrays.toString(cipherArray));
+
         String[] key = FindPrime.readFile(keyfile).split(" ");
         long[] keyLong = Stream.of(key).mapToLong(Long::parseLong).toArray();
         System.out.println("private key : " + Arrays.toString(key));
-        long[] plaintext = new long[cipherArray.length / 2];
 
-        
-        for (int i = 0,j=0; j < cipherArray.length / 2; i+=2,j++) {
+        long[] plaintext = new long[cipherArray.length / 2];
+        String[] BinaryArray = new String[cipherArray.length / 2];
+
+        int blockSize = (int)(Math.log(keyLong[0]) / Math.log(2));
+        System.out.println("Block size : "+blockSize);
+
+        for (int i = 0, j = 0; j < cipherArray.length / 2; i += 2, j++) {
             plaintext[j] = (FindPrime.fastExponent(cipherArrayL[i], (keyLong[0] - 1 - keyLong[2]), keyLong[0])
                     * cipherArrayL[i + 1]) % keyLong[0];
+
+            BinaryArray[j] = Long.toBinaryString(plaintext[j]);
         }
-       
-        
-        return plaintext;
+
+        System.out.println("Plain Text : " + Arrays.toString(plaintext));
+        // System.out.println("Binary is " + Arrays.toString(BinaryArray));
+
+        return BinaryArray;
 
     }
 
