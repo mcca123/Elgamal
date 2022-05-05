@@ -1,4 +1,3 @@
-import java.security.Key;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Scanner;
@@ -42,9 +41,9 @@ public class Main {
         KeyGen.TextFliePublicKey(key);
         KeyGen.TextFliePrivateKey(key);
 
-        System.out.println("==Encryption==");
+        System.out.println("==Block Split==");
         
-        int blockSize = (int)(Math.log(safePrime) / Math.log(2));;
+        int blockSize = (int)(Math.log(safePrime) / Math.log(2));
         System.out.println("Block Size :" + blockSize);
         /// 11111100011
         String[] plaintextArray = Encryption.printPrettyBinary(binaryResult, blockSize);
@@ -63,6 +62,7 @@ public class Main {
         }
         System.out.println("Plaintext Decimal Array : " + Arrays.toString(plaintextDecimal));
 
+        System.out.println("==Encryption==");
         String cipherText =Encryption.encryption(plaintextDecimal, "publicKey.txt");
         System.out.println("Cipher Text : "+cipherText);
 

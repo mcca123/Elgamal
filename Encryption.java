@@ -105,8 +105,8 @@ public class Encryption {
         long[] plaintext = new long[cipherArray.length / 2];
         String[] BinaryArray = new String[cipherArray.length / 2];
 
-        int blockSize = (int)(Math.log(keyLong[0]) / Math.log(2));
-        System.out.println("Block size : "+blockSize);
+        int blockSize = (int) (Math.log(keyLong[0]) / Math.log(2));
+        System.out.println("Block size : " + blockSize);
 
         for (int i = 0, j = 0; j < cipherArray.length / 2; i += 2, j++) {
             plaintext[j] = (FindPrime.fastExponent(cipherArrayL[i], (keyLong[0] - 1 - keyLong[2]), keyLong[0])
@@ -116,7 +116,15 @@ public class Encryption {
         }
 
         System.out.println("Plain Text : " + Arrays.toString(plaintext));
-        // System.out.println("Binary is " + Arrays.toString(BinaryArray));
+        System.out.println("Binary After delete padding: " + Arrays.toString(BinaryArray));
+        for (int i = 0; i < BinaryArray.length; i++) {
+            StringBuilder sb = new StringBuilder();
+            while (sb.length() < blockSize - BinaryArray[i].length()) {
+                sb.append('0');
+            }
+            sb.append(BinaryArray[i]);
+            BinaryArray[i] = sb.toString();
+        }
 
         return BinaryArray;
 
