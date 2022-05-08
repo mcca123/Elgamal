@@ -30,10 +30,10 @@ public class Encryption {
 
         // long [] Bplain = {0001,1110,1010,1100};
         long[] plain = { 10, 23, 27, 16, 5 };
-        String cipherText = encryption(plain, "publicKey.txt");
+        String cipherText = encrypt(plain, "publicKey.txt");
         System.out.println("Cipher: " + cipherText);
 
-        decryption("cipherText.txt", "privateKey.txt");
+        decrypt("cipherText.txt", "privateKey.txt");
 
     }
 
@@ -53,7 +53,7 @@ public class Encryption {
     }
 
     // input is file
-    public static String encryption(long[] plaintext, String keyFile) {
+    public static String encrypt(long[] plaintext, String keyFile) {
         String[] keyString = FindPrime.readFile(keyFile).split(" ");
         String CipherText = "";
         String fileNamePublic = "CipherText.txt";
@@ -92,7 +92,7 @@ public class Encryption {
 
     }
 
-    public static String[] decryption(String cipherText, String keyfile) {
+    public static String[] decrypt(String cipherText, String keyfile) {
         // String[] keyString = FindPrime.readFile(keyFile).split(" ");
         String[] cipherArray = FindPrime.readFile(cipherText).split(" ");
         long[] cipherArrayL = Stream.of(cipherArray).mapToLong(Long::parseLong).toArray();

@@ -42,11 +42,12 @@ public class Main {
         KeyGen.TextFliePrivateKey(key);
 
         System.out.println("==Block Split==");
-        
-        int blockSize = (int)(Math.log(safePrime) / Math.log(2));
+
+        int blockSize = (int) (Math.log(safePrime) / Math.log(2));
         System.out.println("Block Size :" + blockSize);
         /// 11111100011
         String[] plaintextArray = Encryption.printPrettyBinary(binaryResult, blockSize);
+        System.out.println("binary result : " + binaryResult);
         System.out.println("Plaintext Array : " + Arrays.toString(plaintextArray));
 
         System.out.println(
@@ -63,12 +64,12 @@ public class Main {
         System.out.println("Plaintext Decimal Array : " + Arrays.toString(plaintextDecimal));
 
         System.out.println("==Encryption==");
-        String cipherText =Encryption.encryption(plaintextDecimal, "publicKey.txt");
-        System.out.println("Cipher Text : "+cipherText);
+        String cipherText = Encryption.encrypt(plaintextDecimal, "publicKey.txt");
+        System.out.println("Cipher Text : " + cipherText);
 
         System.out.println("==Decryption==");
-        String [] plain = Encryption.decryption("cipherText.txt", "privateKey.txt");
-        System.out.println("Binary text :"+Arrays.toString(plain));
+        String[] plain = Encryption.decrypt("cipherText.txt", "privateKey.txt");
+        System.out.println("Binary text :" + Arrays.toString(plain));
     }
 
     public static void getInput() {
