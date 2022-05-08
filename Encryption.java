@@ -105,7 +105,7 @@ public class Encryption {
 
     }
 
-    public static String[] decrypt(String cipherText, String keyfile) {
+    public static String decrypt(String cipherText, String keyfile) {
         // String[] keyString = FindPrime.readFile(keyFile).split(" ");
         String[] cipherArray = FindPrime.readFile(cipherText).split(" ");
         // []String => []Long
@@ -134,7 +134,7 @@ public class Encryption {
         }
 
         System.out.println("Plain Text : " + Arrays.toString(plaintext));
-        System.out.println("Binary After delete padding: " + Arrays.toString(BinaryArray));
+        System.out.println("Binary before delete padding: " + Arrays.toString(BinaryArray));
         for (int i = 0; i < BinaryArray.length; i++) {
             StringBuilder sb = new StringBuilder();
             while (sb.length() < blockSize - BinaryArray[i].length()) {
@@ -143,9 +143,21 @@ public class Encryption {
             sb.append(BinaryArray[i]);
             BinaryArray[i] = sb.toString();
         }
+        int n = 32;
+        int lengthPadding = (BinaryArray.length * blockSize) - n;
+        int lastBlock = BinaryArray.length - 1;
+        BinaryArray[lastBlock] = BinaryArray[lastBlock].substring(0,blockSize - lengthPadding);
+        System.out.println("after delete padding : " + Arrays.toString(BinaryArray));
+        String word = binaryToWord(BinaryArray);
+        return word;
+    }
 
-        return BinaryArray;
+    public static String binaryToWord(String BinaryArray[]){
+        String temp = "";
+        String resultWord = String.join(temp,BinaryArray);
+        System.out.println("resule : " + resultWord);
 
+        return resultWord;
     }
 
     // divide by blocksize for beautiful
