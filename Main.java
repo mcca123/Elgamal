@@ -55,7 +55,7 @@ public class Main {
 
         long[] plaintextDecimal = new long[plaintextArray.length];
 
-        // Convert string Binary To Decimal
+        // Convert string Binary To Decimal 0010 => 2
         for (int i = 0; i < plaintextArray.length; i++) {
 
             plaintextDecimal[i] = Long.parseLong(plaintextArray[i], 2);
