@@ -165,7 +165,7 @@ public class Encryption {
         resultWord = SubStringByBlock(resultWord,8," ");
         System.out.println("Binary text with separ : " + resultWord);
         //01101101 => m
-        String plainText = " ";
+        String plainText = "";
             for(int index = 0; index < resultWord.length(); index+=9) {
                 String temp = resultWord.substring(index, index+8);
                 int num = Integer.parseInt(temp,2);
