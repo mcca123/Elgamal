@@ -30,8 +30,6 @@ public class KeyGen {
         } else {
             System.out.println("-" + a + " % " + p + " is key generator");
             a = p + ((a * (-1)) % p);
-
-            System.out.println(a + " is key generator");
         }
         keyGen = a;
 

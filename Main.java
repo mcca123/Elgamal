@@ -45,11 +45,12 @@ public class Main {
 
         int blockSize = (int) (Math.log(safePrime) / Math.log(2));
         System.out.println("Block Size :" + blockSize);
-        /// 11111100011
+        /// 111 111 000 11
         String[] plaintextArray = Encryption.printPrettyBinary(binaryResult, blockSize);
         System.out.println("binary result : " + binaryResult);
         System.out.println("Plaintext Array : " + Arrays.toString(plaintextArray));
 
+        ///111 111 000 110
         System.out.println(
                 "Plaintext Array After padding : " + Arrays.toString(Encryption.padding(plaintextArray, blockSize)));
 

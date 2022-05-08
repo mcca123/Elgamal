@@ -9,26 +9,6 @@ import java.util.stream.Stream;
 
 public class Encryption {
     public static void main(String[] args) {
-        // long generatedLong = new Random().nextLong();
-        // System.out.println("ran: " + generatedLong);
-        // long r = Math.abs(generatedLong);
-        // System.out.println("ran po: " + r);
-        // long x = 47857;
-        // long p = 2189725403L;// 11
-        // long g = 619226901;// 2
-        // long y = 1017512232;// 2
-        // long u = 1027894598;// 2
-
-        // System.out.println("Plain text:" + x);
-        // System.out.println("==Encryption==");
-        // long[] cipher = encryption(p, g, y, x);
-        // System.out.println("a :" + cipher[0]);
-        // System.out.println("b :" + cipher[1]);
-        // System.out.println("==Decryption==");
-        // long plaintext = decryption(p, g, u, cipher[0], cipher[1]);
-        // System.out.println("plain text: " + plaintext);
-
-        // long [] Bplain = {0001,1110,1010,1100};
         long[] plain = { 10, 23, 27, 16, 5 };
         String cipherText = encrypt(plain, "publicKey.txt");
         System.out.println("Cipher: " + cipherText);
@@ -66,25 +46,27 @@ public class Encryption {
 
         System.out.println(Arrays.toString(plaintext));
 
+        //[] string => [] Long , for calculate
         long[] key = Stream.of(keyString).mapToLong(Long::parseLong).toArray();
-        // System.out.println(Arrays.toString(keyString));
-        // System.out.println(Arrays.toString(key));
 
+        //Cipher Text A,B
         for (int i = 0; i < plaintext.length; i++) {
             long k = 0;
+            //random K , gcd(k,safeprime = 1)
             while (FindPrime.gcd(k, key[0] - 1) != 1) {
                 k = 1 + (long) (Math.random() * (key[0]));
                 // System.out.println("k: " + k);
             }
 
+            //fine A = (g^k) % p
             long a = FindPrime.fastExponent(key[1], k, key[0]);
+            //fine B = ((y^k) % p * plainText(x)) % p
             long b = (FindPrime.fastExponent(key[2], k, key[0]) * (plaintext[i] % key[0])) % key[0];
             // long[] cipher = { a, b };
             CipherText += a + " " + b + " ";
             writerPublic.flush();
             writerPublic.append(Long.toString(a) + " ");
             writerPublic.append(Long.toString(b) + " ");
-
         }
         writerPublic.close();
 
@@ -95,23 +77,28 @@ public class Encryption {
     public static String[] decrypt(String cipherText, String keyfile) {
         // String[] keyString = FindPrime.readFile(keyFile).split(" ");
         String[] cipherArray = FindPrime.readFile(cipherText).split(" ");
+        //[]String => []Long
         long[] cipherArrayL = Stream.of(cipherArray).mapToLong(Long::parseLong).toArray();
         System.out.println("cipher text : " + Arrays.toString(cipherArray));
 
+        //string [] key = read keyflie
         String[] key = FindPrime.readFile(keyfile).split(" ");
+        //[] string => []long
         long[] keyLong = Stream.of(key).mapToLong(Long::parseLong).toArray();
         System.out.println("private key : " + Arrays.toString(key));
 
+        //create [] for waiting input
         long[] plaintext = new long[cipherArray.length / 2];
         String[] BinaryArray = new String[cipherArray.length / 2];
 
         int blockSize = (int) (Math.log(keyLong[0]) / Math.log(2));
         System.out.println("Block size : " + blockSize);
 
+        //find plain text
         for (int i = 0, j = 0; j < cipherArray.length / 2; i += 2, j++) {
+            //Plaintext = (B / (A ^ U)) % P => (B * (A ^ (P - 1 - U))) % P 
             plaintext[j] = (FindPrime.fastExponent(cipherArrayL[i], (keyLong[0] - 1 - keyLong[2]), keyLong[0])
                     * cipherArrayL[i + 1]) % keyLong[0];
-
             BinaryArray[j] = Long.toBinaryString(plaintext[j]);
         }
 
@@ -167,5 +154,7 @@ public class Encryption {
 
         return plaintextString;
     }
+
+
 
 }
