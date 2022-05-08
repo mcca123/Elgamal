@@ -41,31 +41,8 @@ public class Main {
         KeyGen.TextFliePublicKey(key);
         KeyGen.TextFliePrivateKey(key);
 
-        System.out.println("==Block Split==");
-
-        int blockSize = (int) (Math.log(safePrime) / Math.log(2));
-        System.out.println("Block Size :" + blockSize);
-        /// 111 111 000 11
-        String[] plaintextArray = Encryption.printPrettyBinary(binaryResult, blockSize);
-        System.out.println("binary result : " + binaryResult);
-        System.out.println("Plaintext Array : " + Arrays.toString(plaintextArray));
-
-        ///111 111 000 110
-        System.out.println(
-                "Plaintext Array After padding : " + Arrays.toString(Encryption.padding(plaintextArray, blockSize)));
-
-        long[] plaintextDecimal = new long[plaintextArray.length];
-
-        // Convert string Binary To Decimal 0010 => 2
-        for (int i = 0; i < plaintextArray.length; i++) {
-
-            plaintextDecimal[i] = Long.parseLong(plaintextArray[i], 2);
-
-        }
-        System.out.println("Plaintext Decimal Array : " + Arrays.toString(plaintextDecimal));
-
-        System.out.println("==Encryption==");
-        String cipherText = Encryption.encrypt(plaintextDecimal, "publicKey.txt");
+        //System.out.println("==Encryption==");
+        String cipherText = Encryption.encrypt(filename, "publicKey.txt");
         System.out.println("Cipher Text : " + cipherText);
 
         System.out.println("==Decryption==");
