@@ -68,8 +68,8 @@ public class Main {
         System.out.println("Cipher Text : "+cipherText);
 
         System.out.println("==Decryption==");
-        String [] plain = Encryption.decryption("cipherText.txt", "privateKey.txt");
-        System.out.println("Binary text :"+Arrays.toString(plain));
+        String plain = Encryption.decryption("cipherText.txt", "privateKey.txt");
+        System.out.println("Binary text :"+ (plain));
     }
 
     public static void getInput() {
