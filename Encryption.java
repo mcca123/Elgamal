@@ -156,12 +156,23 @@ public class Encryption {
         return word;
     }
 
-    public static String binaryToWord(String BinaryArray[]) {
-        String temp = "";
-        String resultWord = String.join(temp, BinaryArray);
-        System.out.println("resule : " + resultWord);
-
-        return resultWord;
+    public static String binaryToWord(String BinaryArray[]){
+        String tempForJoin = "";
+        //10101, 11011, 10101, 11011 => 10101110111010111011
+        String resultWord = String.join(tempForJoin,BinaryArray);
+        System.out.println("Binary text without separator : " + resultWord);
+        //10101110111010111011 => 1010111011 1010111011
+        resultWord = SubStringByBlock(resultWord,8," ");
+        System.out.println("Binary text with separ : " + resultWord);
+        //01101101 => m
+        String plainText = " ";
+            for(int index = 0; index < resultWord.length(); index+=9) {
+                String temp = resultWord.substring(index, index+8);
+                int num = Integer.parseInt(temp,2);
+                char letter = (char) num;
+                plainText = plainText+letter;
+            }
+        return plainText;
     }
 
     // divide by blocksize

@@ -47,7 +47,7 @@ public class Main {
 
         System.out.println("==Decryption==");
         String plain = Encryption.decrypt("cipherText.txt", "privateKey.txt");
-        System.out.println("Binary text :"+ (plain));
+        System.out.println("PlainText :"+ (plain));
     }
 
     public static void getInput() {
