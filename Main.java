@@ -5,6 +5,8 @@ import java.util.Scanner;
 public class Main {
     public static String filename;
     public static int bit;
+    public static String cipherText;
+    
     static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -42,12 +44,15 @@ public class Main {
         KeyGen.TextFliePrivateKey(key);
 
         //System.out.println("==Encryption==");
-        String cipherText = Encryption.encrypt(filename, "publicKey.txt");
+        cipherText = Encryption.encrypt(filename, "publicKey.txt");
         System.out.println("Cipher Text : " + cipherText);
 
         System.out.println("==Decryption==");
         String plain = Encryption.decrypt("cipherText.txt", "privateKey.txt");
         System.out.println("PlainText :"+ (plain));
+
+        Signature.run();
+        
     }
 
     public static void getInput() {
