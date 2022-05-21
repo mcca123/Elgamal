@@ -8,8 +8,7 @@ import java.util.Arrays;
 public class Hash {
 	public static Object hashCode;
 
-    public static String hashThisString(String input)
-	{
+	public static String hashThisString(String input) {
 		try {
 			// getInstance() method is called with algorithm SHA-512
 			MessageDigest md = MessageDigest.getInstance("SHA-1");
@@ -18,18 +17,20 @@ public class Hash {
 			// to calculate message digest of the input string
 			// returned as array of byte
 			// System.out.println("input Bytes : " + Arrays.toString(input.getBytes()));
-			// System.out.println("md.digst : "+ Arrays.toString(md.digest(input.getBytes())));
+			// System.out.println("md.digst : "+
+			// Arrays.toString(md.digest(input.getBytes())));
 			byte[] messageDigest = md.digest(input.getBytes());
 
 			// Convert byte array into signum representation
 			BigInteger no = new BigInteger(1, messageDigest);
+			System.out.println("no; " + no);
 
 			// Convert message digest into hex value
-			String hashtext = no.toString(16);
+			String hashtext = no.toString(2);
 
 			// Add preceding 0s to make it 32 bit
 			// while (hashtext.length() < 32) {
-			// 	hashtext = "0" + hashtext;
+			// hashtext = "0" + hashtext;
 			// }
 
 			// return the HashText
@@ -43,10 +44,9 @@ public class Hash {
 	}
 
 	// Driver code
-	public static void main(String args[]) throws NoSuchAlgorithmException
-	{
-		// String s1 = "aaa";
-		// System.out.println("\n" + s1 + " : " + encryptThisString(s1));
+	public static void main(String args[]) throws NoSuchAlgorithmException {
+		String s1 = "aaa";
+		System.out.println("\n" + s1 + " : " + hashThisString(s1));
 		// String hash = encryptThisString(Main.cipherText);
 	}
 }

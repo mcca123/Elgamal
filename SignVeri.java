@@ -1,4 +1,3 @@
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
@@ -23,10 +22,12 @@ public class SignVeri {
         long g = key[1];
         long x = key[2];
 
+        //message-->String
+        //String --> long m(base 10)
         long m = 10;
 
         long k = 0;
-        // random K , gcd(k,safeprime = 1)
+        // random K , gcd(k,safeprime-1) = 1
         while (FindPrime.gcd(k, p - 1) != 1) {
             k = 1 + (long) (Math.random() * (p - 1));
             // System.out.println("k: " + k);
@@ -49,7 +50,6 @@ public class SignVeri {
         long x = key[2];
 
         long m = message;
-        System.out.println("p" + p);
 
         long k = 0;
         // random K , gcd(k,safeprime = 1)
@@ -57,15 +57,12 @@ public class SignVeri {
             k = 1 + (long) (Math.random() * (p - 1));
             // System.out.println("k: " + k);
         }
-        k = 7;
-        System.out.println("k" + k);
 
         long r = FindPrime.fastExponent(g, k, p);
         long s = (FindPrime.inverse(p - 1, k) * (m - (x * r))) % (p - 1);
         if (s < 0) {
             s = (p - 1) + (s % (p - 1));
         }
-        System.out.println("inv: " + FindPrime.inverse(p - 1, k));
         long[] signature = { m, r, s };
         return signature;
     }
