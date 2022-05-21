@@ -131,6 +131,7 @@ public class Encryption {
         /// 111 111 000 11
         String[] plaintextArray = BlockDivide(binaryResult, blockSize);
         System.out.println("Plaintext Array : " + Arrays.toString(plaintextArray));
+        System.out.println("Plain text Arr length:"+plaintextArray.length);
 
         /// 111 111 000 110
         System.out.println("Plaintext Array After padding : " + Arrays.toString(padding(plaintextArray, blockSize)));
@@ -141,7 +142,7 @@ public class Encryption {
 
             plaintextDecimal[i] = Long.parseLong(plaintextArray[i], 2);
 
-        }
+        } 
 
         System.out.println("==Encryption==");
         String CipherText = "";
@@ -225,6 +226,7 @@ public class Encryption {
         // String[] keyString = FindPrime.readFile(keyFile).split(" ");
         String[] cipherArray = cipherText.split(" ");
         System.out.println("cipher Array : " + Arrays.toString(cipherArray));
+        System.out.println("Cipher Array length :"+cipherArray.length);
         // []String => []Long
         long[] cipherArrayL = Stream.of(cipherArray).mapToLong(Long::parseLong).toArray();
         System.out.println("cipher text : " + Arrays.toString(cipherArray));

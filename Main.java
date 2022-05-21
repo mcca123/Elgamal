@@ -59,4 +59,5 @@ public class Main {
         System.out.print("input filename : ");
         filename = sc.nextLine() + ".txt";
     }
+    
 }

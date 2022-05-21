@@ -37,8 +37,6 @@ public class FindPrime {
 
     }
 
-    
-
     public static String readFile(String filename) {
         String data = "";
         try {
@@ -218,5 +216,34 @@ public class FindPrime {
         }
 
         return result;
+    }
+
+    public static long inverse(long mod, long n) {
+        long inverse = 0;
+        long r1 = mod;
+        long r2 = n;
+        long t1 = 0;
+        long t2 = 1;
+        long q;
+        long r;
+        long t;
+
+        while (r2 > 0) {
+            q = r1 / r2;
+            r = r1 - q * r2;
+            r1 = r2;
+            r2 = r;
+            t = t1 - q * t2;
+            t1 = t2;
+            t2 = t;
+        }
+        if (r1 == 1) {
+            inverse = t1;
+        }
+        if (inverse < 0) {
+            inverse = mod + ((inverse) % mod);
+        }
+
+        return inverse;
     }
 }

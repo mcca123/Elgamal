@@ -44,6 +44,7 @@ public class Signature {
         cipherA = cipherAndSignature[0];
         SignatureB = cipherAndSignature[1];
         System.out.println("Sognature after split : " + SignatureB);
+        System.out.println("Cipher after split : " + cipherA);
 
         return cipherAndSignature;
     }
