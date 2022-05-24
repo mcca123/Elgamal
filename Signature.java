@@ -72,11 +72,10 @@ public class Signature {
         System.out.println("y^r*r^s : " + FindPrime.fastExponent(key[2], signature[1], key[0])
                 * FindPrime.fastExponent(signature[1], signature[2], key[0]));
 
-        System.out.println("a : " + FindPrime.fastExponent(key[1], signature[0], key[0]));
-        System.out.println("b : " + FindPrime.fastExponent(key[2], signature[1], key[0]));
-        System.out.println("c : " + FindPrime.fastExponent(signature[1], signature[2], key[0]));
-        System.out.println("d : " + (FindPrime.fastExponent(key[2], signature[1], key[0])
-                * FindPrime.fastExponent(signature[1], signature[2], key[0]) % 167));
+        // System.out.println("a : " + FindPrime.fastExponent(key[1], signature[0], key[0]));
+        // System.out.println("b : " + FindPrime.fastExponent(key[2], signature[1], key[0]));
+        // System.out.println("c : " + FindPrime.fastExponent(signature[1], signature[2], key[0]));
+        // System.out.println("d : " + (FindPrime.fastExponent(key[2], signature[1], key[0]) * FindPrime.fastExponent(signature[1], signature[2], key[0]) % 167));
 
         if (FindPrime.fastExponent(key[1], signature[0],
                 key[0]) == (FindPrime.fastExponent(key[2], signature[1], key[0])
