@@ -51,7 +51,20 @@ public class Main {
         String plain = Encryption.decrypt("cipherText.txt", "privateKey.txt");
         System.out.println("PlainText :"+ (plain));
 
-        Signature.run();
+
+        String textString = FindPrime.readFile("text.txt");
+
+        String textBinary = FindPrime.convertStringToBinary(textString);
+        long [] longDicimalArray = Signature.BinaryToDecimalArray(Hash.hashThisString(textBinary),(int) (Math.log(key.get("p")) / Math.log(2)));
+        // System.out.println("hash : " + Arrays.toString(longDicimalArray));
+        for (int i = 0; i < longDicimalArray.length; i++) {
+            long[] signature = Signature.Signature(longDicimalArray[i], "privateKey.txt");
+            System.out.println("signature: " + Arrays.toString(signature));
+            if (Signature.verifying(signature, "publicKey.txt")) {
+                System.out.println(" Correct");
+            } else
+                System.out.println("Wrong ISAS");
+        }       
         
     }
 

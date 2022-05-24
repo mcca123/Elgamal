@@ -23,7 +23,6 @@ public class Hash {
 
 			// Convert byte array into signum representation
 			BigInteger no = new BigInteger(1, messageDigest);
-			System.out.println("no; " + no);
 
 			// Convert message digest into hex value
 			String hashtext = no.toString(2);
@@ -45,8 +44,8 @@ public class Hash {
 
 	// Driver code
 	public static void main(String args[]) throws NoSuchAlgorithmException {
-		String s1 = "aaa";
-		System.out.println("\n" + s1 + " : " + hashThisString(s1));
+		// String s1 = "aaa";
+		// System.out.println("\n" + s1 + " : " + hashThisString(s1));
 		// String hash = encryptThisString(Main.cipherText);
 	}
 }
