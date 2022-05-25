@@ -88,9 +88,9 @@ public class FindPrime {
         // accept Bit is bits without 0 in front
         int acceptBit = ch.length - countZero;
 
-        // we accept Bit 0-63
-        if (acceptBit > 63) {
-            acceptBit = 63;
+        // we accept Bit 0-31
+        if (acceptBit > 31) {
+            acceptBit = 31;
         }
 
         // bit input
@@ -99,7 +99,7 @@ public class FindPrime {
         bit = sc.nextInt();
 
         // if bit input is error, try aggin unit it correct
-        while (bit > acceptBit || bit <= 0 || bit > 63) {
+        while (bit > acceptBit || bit <= 0 || bit > 31) {
             System.out.println("Accept Bit range is (1," + acceptBit + ")");
             System.out.print("input bit length : ");
             bit = sc.nextInt();
