@@ -6,7 +6,7 @@ public class Main {
     public static String filename;
     public static int bit;
     public static String cipherText;
-    
+
     static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -32,45 +32,52 @@ public class Main {
         Map<String, Long> key = KeyGen.GenKey(keygen, safePrime);
 
         System.out.println("==Public Key==");
-        System.out.println("g :" + key.get("g"));
         System.out.println("p :" + key.get("p"));
+        System.out.println("g :" + key.get("g"));
         System.out.println("y :" + key.get("y"));
         System.out.println("==Private Key==");
-        System.out.println("g :" + key.get("g"));
         System.out.println("p :" + key.get("p"));
+        System.out.println("g :" + key.get("g"));
         System.out.println("u :" + key.get("u"));
 
         KeyGen.TextFliePublicKey(key);
         KeyGen.TextFliePrivateKey(key);
 
-        //System.out.println("==Encryption==");
+        // System.out.println("==Encryption==");
         cipherText = Encryption.encrypt(filename, "publicKey.txt");
         System.out.println("Cipher Text : " + cipherText);
 
         System.out.println("==Decryption==");
         String plain = Encryption.decrypt("cipherText.txt", "privateKey.txt");
-        System.out.println("PlainText :"+ (plain));
-
+        System.out.println("PlainText :" + (plain));
 
         String textString = FindPrime.readFile("text.txt");
 
         String textBinary = FindPrime.convertStringToBinary(textString);
-        long [] longDicimalArray = Signature.BinaryToDecimalArray(Hash.hashThisString(textBinary),(int) (Math.log(key.get("p")) / Math.log(2)));
+        long[] longDicimalArray = Signature.BinaryToDecimalArray(Hash.hashThisString(textBinary),
+                (int) (Math.log(key.get("p") - 1) / Math.log(2)));
         // System.out.println("hash : " + Arrays.toString(longDicimalArray));
+        boolean isVerifying = true;
+        //System.out.println("==Signature==");
         for (int i = 0; i < longDicimalArray.length; i++) {
-            long[] signature = Signature.Signature(longDicimalArray[i], "privateKey.txt");
-            System.out.println("signature: " + Arrays.toString(signature));
+            long[] signature = Signature.signature(longDicimalArray[i], "privateKey.txt");
+             System.out.println("signature: " + Arrays.toString(signature));
             if (Signature.verifying(signature, "publicKey.txt")) {
-                System.out.println(" Correct");
-            } else
+                 System.out.println(" Correct");
+            } else {
+                isVerifying = false;
                 System.out.println("Wrong");
-        }       
-        
+                break;
+            }
+            
+        }
+        System.out.println("Verify is :" + isVerifying);
+
     }
 
     public static void getInput() {
         System.out.print("input filename : ");
         filename = sc.nextLine() + ".txt";
     }
-    
+
 }

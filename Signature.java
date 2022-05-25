@@ -6,7 +6,7 @@ public class Signature {
 
     }
 
-    public static long[] Signature(String message, String keyFile) {
+    public static long[] signature(String message, String keyFile) {
         System.out.println("==Signature==");
         String[] keyString = FindPrime.readFile(keyFile).split(" ");
         // [] string => [] Long , for calculate
@@ -33,7 +33,7 @@ public class Signature {
         return signature;
     }
 
-    public static long[] Signature(long message, String keyFile) {
+    public static long[] signature(long message, String keyFile) {
         System.out.println("==Signature==");
         String[] keyString = FindPrime.readFile(keyFile).split(" ");
         // [] string => [] Long , for calculate
@@ -63,7 +63,7 @@ public class Signature {
     }
 
     public static boolean verifying(long[] signature, String keyFile) {
-
+        System.out.println("===Verify===");
         String[] keyString = FindPrime.readFile(keyFile).split(" ");
         // [] string => [] Long , for calculate
         long[] key = Stream.of(keyString).mapToLong(Long::parseLong).toArray();

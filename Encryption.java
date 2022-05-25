@@ -8,11 +8,15 @@ import java.util.stream.Stream;
 
 public class Encryption {
     public static void main(String[] args) {
-        long[] plain = { 10, 23, 27, 16, 5 };
-        String cipherText = encrypt("plaintext.text", "publicKey.txt");
-        System.out.println("Cipher: " + cipherText);
+        //Encryption
+        System.out.println("==Encryption==");
+        String cipherText = Encryption.encrypt("text.txt", "publicKey.txt");
+        System.out.println("Cipher Text : " + cipherText);
 
-        decrypt("cipherText.txt", "privateKey.txt");
+        // //Decryption
+        System.out.println("==Decryption==");
+        String plain = Encryption.decrypt("cipherText.txt", "privateKey.txt");
+        System.out.println("PlainText :"+ (plain));
 
     }
 
@@ -43,7 +47,7 @@ public class Encryption {
 
         System.out.println("==Block Split==");
         // find block size
-        int blockSize = (int) (Math.log(key[0]) / Math.log(2));
+        int blockSize = (int) (Math.log(key[0]-1) / Math.log(2));
         System.out.println("Block Size :" + blockSize);
         // read Plaintext File
         String plaintext = FindPrime.readFile(plaintextFile);
@@ -124,19 +128,23 @@ public class Encryption {
         long[] plaintext = new long[cipherArray.length / 2];
         String[] BinaryArray = new String[cipherArray.length / 2];
 
-        int blockSize = (int) (Math.log(keyLong[0]) / Math.log(2));
+        int blockSize = (int) ((Math.log(keyLong[0]-1)) / Math.log(2));
         System.out.println("Block size : " + blockSize);
 
         // find plain text
         for (int i = 0, j = 0; j < plaintext.length; i += 2, j++) {
-            // Plaintext = (B / (A ^ U)) % P => (B * (A ^ (P - 1 - U))) % P
+            // Plaintext[base10] = (B / (A ^ U)) % P => (B * (A ^ (P - 1 - U))) % P
             plaintext[j] = (FindPrime.fastExponent(cipherArrayL[i], (keyLong[0] - 1 - keyLong[2]), keyLong[0])
                     * cipherArrayL[i + 1]) % keyLong[0];
+            //long[base10] --> String[base2]
+            //delete 0 by itSelf
             BinaryArray[j] = Long.toBinaryString(plaintext[j]);
         }
 
         System.out.println("Plain Text : " + Arrays.toString(plaintext));
 
+        //add 0 to block Binary 
+        //if we don't add 0, unpadding will error
         for (int i = 0; i < BinaryArray.length; i++) {
             StringBuilder sb = new StringBuilder();
             while (sb.length() < blockSize - BinaryArray[i].length()) {
@@ -148,6 +156,11 @@ public class Encryption {
         System.out.println("Binary before delete padding: " + Arrays.toString(BinaryArray));
         
         //plaintext length is last value in cipher
+        //unpadding
+        //blockSize = 5
+        //block = 5
+        //blockSize * black = 25
+        //plaintLength = 23
         int plaintLength = (int) cipherArrayL[cipherArrayL.length - 1];
         int lengthPadding = (BinaryArray.length * blockSize) - plaintLength;
         int lastBlock = BinaryArray.length - 1;
