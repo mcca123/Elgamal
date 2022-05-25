@@ -63,7 +63,7 @@ public class Main {
             if (Signature.verifying(signature, "publicKey.txt")) {
                 System.out.println(" Correct");
             } else
-                System.out.println("Wrong ISAS");
+                System.out.println("Wrong");
         }       
         
     }
