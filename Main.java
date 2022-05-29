@@ -57,7 +57,12 @@ public class Main {
                         String textfilename = sc.nextLine();
                         System.out.print("input Key filename : ");
                         String keyfilename = sc.nextLine();
-                        cipherText = Encryption.encrypt(textfilename, keyfilename);
+                        //create Flie for CipherText
+                        System.out.print("input cipher file name : ");
+                        String fileNameFile = sc.nextLine();
+                        Encryption.stringToFile(fileNameFile,"");  
+                        //encryption Flie
+                        cipherText = Encryption.encrypt(textfilename, keyfilename, fileNameFile);
                         System.out.println("Cipher Text : " + cipherText);
                         break;
                     case 3:
@@ -65,8 +70,13 @@ public class Main {
                         System.out.print("input Plaintext String : ");
                         String textString = sc.nextLine();
                         System.out.print("input Key filename : ");
-                         keyfilename = sc.nextLine();
-                        cipherText = Encryption.encryptString(textString, keyfilename);
+                        keyfilename = sc.nextLine();
+                        //create Flie for CipherText
+                        System.out.print("input cipher file name : ");
+                        String fileNameString = sc.nextLine();
+                        Encryption.stringToFile(fileNameString,"");  
+                        //encryption String
+                        cipherText = Encryption.encryptString(textString, keyfilename,fileNameString);
                         System.out.println("Cipher Text : " + cipherText);
                         break;
                     case 4:
@@ -79,7 +89,7 @@ public class Main {
                         // create plaintext
                         System.out.println("PlainText :" + (plain));
                         //plinText to Flie
-                        System.out.println("input name File of output plainText => ....txt ");
+                        System.out.print("input plainText file name : ");
                         String DecryText = sc.nextLine();
                         Encryption.stringToFile(DecryText,plain);
                     case 7:

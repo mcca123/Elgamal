@@ -13,7 +13,7 @@ public class Encryption {
     public static void main(String[] args) {
         //Encryption
         System.out.println("==Encryption==");
-        String cipherText = Encryption.encrypt("text.txt", "publicKey.txt");
+        String cipherText = Encryption.encrypt("text.txt", "publicKey.txt","fileName");
         System.out.println("Cipher Text : " + cipherText);
 
         // // //Decryption
@@ -39,7 +39,7 @@ public class Encryption {
     }
 
     // input is file
-    public static String encrypt(String plaintextFile, String keyFile) {
+    public static String encrypt(String plaintextFile, String keyFile, String fileNameFile) {
 
         // read Key File
         String[] keyString = FindPrime.readFile(keyFile).split(" ");
@@ -77,7 +77,7 @@ public class Encryption {
 
         System.out.println("==Encryption==");
         String CipherText = "";
-        String CipherFileName = "CipherText.txt";
+        String CipherFileName = fileNameFile;
         PrintWriter writerPublic = null;
         try {
             writerPublic = new PrintWriter(CipherFileName);
@@ -116,7 +116,7 @@ public class Encryption {
     }
 
     // input is file
-    public static String encryptString(String plaintext, String keyFile) {
+    public static String encryptString(String plaintext, String keyFile,String fileNameString) {
 
         // read Key File
         String[] keyString = FindPrime.readFile(keyFile).split(" ");
@@ -153,7 +153,7 @@ public class Encryption {
 
         System.out.println("==Encryption==");
         String CipherText = "";
-        String CipherFileName = "CipherText.txt";
+        String CipherFileName = fileNameString;
         PrintWriter writerPublic = null;
         try {
             writerPublic = new PrintWriter(CipherFileName);
@@ -250,12 +250,11 @@ public class Encryption {
         return word;
     }
 
-    public static void stringToFile(String filename,String plain){
+    public static void stringToFile(String filename,String text){
         try {
             FileWriter myWriter = new FileWriter(filename);
-            myWriter.write(plain);
+            myWriter.write(text);
             myWriter.close();
-            System.out.println("Successfully wrote to the file.");
           } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
