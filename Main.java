@@ -138,8 +138,7 @@ public class Main {
                         textfilename = sc.nextLine();
                         System.out.print("input Public Key filename : ");
                         keyfilename = sc.nextLine();
-                        long [] longs ={1,2} ;
-                        boolean verify = Signature.verifying(textfilename, longs, keyfilename);
+                        boolean verify = Signature.verifying(textfilename, keyfilename);
                         break;
                     case 8:
                         System.out.println("==Decryption==");

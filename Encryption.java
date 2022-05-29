@@ -146,9 +146,7 @@ public class Encryption {
         // Convert string Binary To Decimal 0010 => 2
         long[] plaintextDecimal = new long[plaintextArray.length];
         for (int i = 0; i < plaintextArray.length; i++) {
-
             plaintextDecimal[i] = Long.parseLong(plaintextArray[i], 2);
-
         }
 
         System.out.println("==Encryption==");
@@ -197,6 +195,12 @@ public class Encryption {
         // []String => []Long
         long[] cipherArrayL = Stream.of(cipherArray).mapToLong(Long::parseLong).toArray();
         System.out.println("cipher text : " + Arrays.toString(cipherArray));
+        //find binary text length
+        int plaintLength = (int) cipherArrayL[cipherArrayL.length - 1];
+        long[] cipherLongArray = new long[cipherArrayL.length-1];
+        for (int i = 0; i < cipherArrayL.length; i++) {
+            cipherLongArray[i] = cipherArrayL[i];
+        }
 
         // string [] key = read keyflie
         String[] key = FindPrime.readFile(keyfile).split(" ");
@@ -241,7 +245,7 @@ public class Encryption {
         //block = 5
         //blockSize * black = 25
         //plaintLength = 23
-        int plaintLength = (int) cipherArrayL[cipherArrayL.length - 1];
+        
         int lengthPadding = (BinaryArray.length * blockSize) - plaintLength;
         int lastBlock = BinaryArray.length - 1;
         BinaryArray[lastBlock] = BinaryArray[lastBlock].substring(0, blockSize - lengthPadding);

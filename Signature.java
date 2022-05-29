@@ -2,17 +2,18 @@ import java.util.Arrays;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
-
 public class Signature {
-    public static void main(String[] args) {
-        long[] signature = signature("text.txt", "privateKey.txt");
-        System.out.println("Signature" + Arrays.toString(signature));
+    // public static void main(String[] args) {
+    //     long[] signature = signature("text.txt", "privateKey.txt");
+    //     System.out.println("Signature" + Arrays.toString(signature));
 
-        boolean verify =verifying("text.txt", signature, "publicKey.txt");
-        if(verify)System.out.println("Corrected");
-        else System.out.println("IncorrectedKuuu");
+    //     boolean verify = verifying("text.txt", "publicKey.txt");
+    //     if (verify)
+    //         System.out.println("Corrected");
+    //     else
+    //         System.out.println("Incorrected");
 
-    }
+    // }
 
     public static long[] signature(String plaintextFile, String keyFile) {
         Scanner sc = new Scanner(System.in);
@@ -30,6 +31,7 @@ public class Signature {
         int blockSize = (int) (Math.log(p - 1) / Math.log(2));
 
         String textString = FindPrime.readFile(plaintextFile);
+        System.out.println("Message : " + textString);
         System.out.println("hash value:" + Hash.hashThisString(textString));
         long[] longHashArray = Signature.BinaryToDecimalArray(Hash.hashThisString(textString), blockSize);
         long HashValue = 0;
@@ -51,28 +53,29 @@ public class Signature {
         if (s < 0) {
             s = (p - 1) + (s % (p - 1));
         }
-        System.out.println("k: " + k);
-        System.out.println("g: " + g);
-        System.out.println("x: " + x);
-        System.out.println("p: " + p);
-        System.out.println("m: " + HashValue);
-        System.out.println("r: " + r);
-        System.out.println("s: " + s);
-        System.out.println("k-1: " + FindPrime.inverse(p - 1, k));
+        // System.out.println("k: " + k);
+        // System.out.println("g: " + g);
+        // System.out.println("x: " + x);
+        // System.out.println("p: " + p);
+        // System.out.println("m: " + HashValue);
+        // System.out.println("r: " + r);
+        // System.out.println("s: " + s);
+        // System.out.println("k-1: " + FindPrime.inverse(p - 1, k));
 
         // long[] signature = { m, r, s };
         long[] signature = { r, s };
 
-        String signedMessage = textString +" - " + r + " " + s;
+        String signedMessage = textString + "-" + r + " " + s;
 
         System.out.print("input signed Message file name : ");
         String fileNameSigned = sc.nextLine();
-        Encryption.stringToFile(fileNameSigned,signedMessage);
+        Encryption.stringToFile(fileNameSigned, signedMessage);
         // System.out.println("signature"+Arrays.toString(signature));
+        sc.close();
         return signature;
     }
 
-    public static boolean verifying(String plaintextFile, long[] signature, String keyFile) {
+    public static boolean verifying(String plaintextFile, String keyFile) {
         System.out.println("===Verify===");
         String[] keyString = FindPrime.readFile(keyFile).split(" ");
         // [] string => [] Long , for calculate
@@ -80,40 +83,38 @@ public class Signature {
         long p = key[0];
         long g = key[1];
         long y = key[2];
-        long r = signature[0];
-        long s = signature[1];
-        System.out.println("g: " + key[1]);
-        // System.out.println("x: " + signature[0]);
-        System.out.println("p: " + key[0]);
-        System.out.println("y: " + key[2]);
-        System.out.println("r: " + signature[0]);
-        System.out.println("s: " + signature[1]);
 
         int blockSize = (int) (Math.log(p - 1) / Math.log(2));
 
-        // read message file
+        // read signed message file
         String textString = FindPrime.readFile(plaintextFile);
-        System.out.println("hash value:" + Hash.hashThisString(textString));
-        long[] longHashArray = Signature.BinaryToDecimalArray(Hash.hashThisString(textString), blockSize);
+        String[] textArray = textString.split("-");
+        String[] signature = textArray[1].split(" ");
+        System.out.println("signature: " + Arrays.toString(signature));
+        long r = Long.parseLong(signature[0]);
+        long s = Long.parseLong(signature[1]);
+        System.out.println("Message: " + textArray[0]);
 
-        // long m = plaintextFile;
-        // System.out.println("mes" + Arrays.toString(longHashArray));
+        long[] longHashArray = Signature.BinaryToDecimalArray(Hash.hashThisString(textArray[0]), blockSize);
 
         long HashValue = 0;
         for (int i = 0; i < longHashArray.length; i++) {
             HashValue = (HashValue + longHashArray[i]);
         }
-        System.out.println("Hash Value" + HashValue);
+        System.out.println("Hash Value: " + HashValue);
 
         System.out.println("g^x: " + FindPrime.fastExponent(g, HashValue, p));
         System.out.println("y^r*r^s : " + (FindPrime.fastExponent(y, r, p)
                 * FindPrime.fastExponent(r, s, p) % p));
 
         if (FindPrime.fastExponent(g, HashValue, p) == (FindPrime.fastExponent(y, r, p)
-                * FindPrime.fastExponent(r, s, p) % p))
+                * FindPrime.fastExponent(r, s, p) % p)) {
+            System.out.println("Correct");
             return true;
-        else
+        } else {
+            System.out.println("Incorrect");
             return false;
+        }
     }
 
     public static long[] BinaryToDecimalArray(String BinaryMessage, long blockSize) {
@@ -133,10 +134,6 @@ public class Signature {
         String resultWord = Encryption.SubStringByBlock(BinaryMessage, (int) blockSize, " ");
         System.out.println("resultWord : " + resultWord);
 
-        // String[] BinaryMessageArray = new String[BinaryMessage.length() / (int)
-        // blockSize];
-        // System.out.println("Bina:" + Arrays.toString(BinaryMessageArray));
-
         // 11110000 11110000
         // temp = 11110000
         // 11110000 11110000 11110000 11110000 => 240, 240, 240, 240
@@ -145,11 +142,6 @@ public class Signature {
         String[] ArrayString = resultWord.split(" ");
         System.out.println("ArrayString : " + Arrays.toString(ArrayString));
 
-        // for(int index = 0,i = 0; index < BinaryMessage.length();
-        // index+=(blockSize+1),i++) {
-        // String temp = BinaryMessage.substring(index, (int)(index+blockSize));
-        // BinaryMessageArray[i] = String.valueOf(Integer.parseInt(temp,2));
-        // }
         long[] longDicimalArray = new long[ArrayString.length];
         for (int i = 0; i < ArrayString.length; i++) {
             longDicimalArray[i] = Long.parseLong(ArrayString[i], 2);
