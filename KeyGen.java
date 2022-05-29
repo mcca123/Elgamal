@@ -9,7 +9,7 @@ public class KeyGen {
         long p = 563L;
         long keygen = KeyGenerator(p);
         Map<String, Long> key = GenKey(keygen, p);
-        //Map<String, String> keyBinary = KeyTobinary(key);
+        // Map<String, String> keyBinary = KeyTobinary(key);
         TextFliePublicKey(key);
         TextFliePrivateKey(key);
 
@@ -75,7 +75,7 @@ public class KeyGen {
         writerPublic.flush();
         writerPublic.append(key.get("p") + " ");
         writerPublic.append(key.get("g") + " ");
-        writerPublic.append(key.get("y") + " ");
+        writerPublic.append(Long.toString(key.get("y")));
         writerPublic.close();
     }
 
