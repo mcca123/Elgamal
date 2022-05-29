@@ -3,6 +3,8 @@ import java.util.stream.Stream;
 
 public class Signature {
     public static void main(String[] args) {
+        long test = (646957948L * 588431087L) % 708294298L;
+        System.out.println("Te:" + test);
 
     }
 
@@ -54,10 +56,20 @@ public class Signature {
         }
 
         long r = FindPrime.fastExponent(g, k, p);
-        long s = (FindPrime.inverse(p - 1, k) * (m - (x * r))) % (p - 1);
+        long s = (FindPrime.inverse(p - 1, k) * (m - ((x * r) % (p - 1)))) % (p - 1);
+        System.out.println("s: " + s);
         if (s < 0) {
             s = (p - 1) + (s % (p - 1));
         }
+        System.out.println("k: " + k);
+        System.out.println("g: " + g);
+        System.out.println("x: " + x);
+        System.out.println("p: " + p);
+        System.out.println("m: " + m);
+        System.out.println("r: " + r);
+        System.out.println("s: " + s);
+        System.out.println("k-1: " + FindPrime.inverse(p - 1, k));
+
         long[] signature = { m, r, s };
         return signature;
     }
@@ -67,15 +79,25 @@ public class Signature {
         String[] keyString = FindPrime.readFile(keyFile).split(" ");
         // [] string => [] Long , for calculate
         long[] key = Stream.of(keyString).mapToLong(Long::parseLong).toArray();
+        System.out.println("g: " + key[1]);
+        System.out.println("x: " + signature[0]);
+        System.out.println("p: " + key[0]);
+        System.out.println("y: " + key[2]);
+        System.out.println("r: " + signature[1]);
+        System.out.println("s: " + signature[2]);
 
         System.out.println("g^x: " + FindPrime.fastExponent(key[1], signature[0], key[0]));
         System.out.println("y^r*r^s : " + (FindPrime.fastExponent(key[2], signature[1], key[0])
-        * FindPrime.fastExponent(signature[1], signature[2], key[0]) % key[0]));
+                * FindPrime.fastExponent(signature[1], signature[2], key[0]) % key[0]));
 
-        // System.out.println("a : " + FindPrime.fastExponent(key[1], signature[0], key[0]));
-        // System.out.println("b : " + FindPrime.fastExponent(key[2], signature[1], key[0]));
-        // System.out.println("c : " + FindPrime.fastExponent(signature[1], signature[2], key[0]));
-        // System.out.println("d : " + (FindPrime.fastExponent(key[2], signature[1], key[0]) * FindPrime.fastExponent(signature[1], signature[2], key[0]) % 167));
+        // System.out.println("a : " + FindPrime.fastExponent(key[1], signature[0],
+        // key[0]));
+        // System.out.println("b : " + FindPrime.fastExponent(key[2], signature[1],
+        // key[0]));
+        // System.out.println("c : " + FindPrime.fastExponent(signature[1],
+        // signature[2], key[0]));
+        // System.out.println("d : " + (FindPrime.fastExponent(key[2], signature[1],
+        // key[0]) * FindPrime.fastExponent(signature[1], signature[2], key[0]) % 167));
 
         if (FindPrime.fastExponent(key[1], signature[0],
                 key[0]) == (FindPrime.fastExponent(key[2], signature[1], key[0])
@@ -100,10 +122,11 @@ public class Signature {
         System.out.println("after pad : " + BinaryMessage);
 
         // 1111000011110000111100001111 => 11110000 11110000 11110000
-        String resultWord = Encryption.SubStringByBlock(BinaryMessage, (int) blockSize," ");
+        String resultWord = Encryption.SubStringByBlock(BinaryMessage, (int) blockSize, " ");
         System.out.println("resultWord : " + resultWord);
 
-        // String[] BinaryMessageArray = new String[BinaryMessage.length() / (int) blockSize];
+        // String[] BinaryMessageArray = new String[BinaryMessage.length() / (int)
+        // blockSize];
         // System.out.println("Bina:" + Arrays.toString(BinaryMessageArray));
 
         // 11110000 11110000
@@ -112,7 +135,7 @@ public class Signature {
         // 240, 240, 240, 240 => [240, 240, 240, 240]
 
         String[] ArrayString = resultWord.split(" ");
-        System.out.println("ArrayString : "+ Arrays.toString(ArrayString));
+        System.out.println("ArrayString : " + Arrays.toString(ArrayString));
 
         // for(int index = 0,i = 0; index < BinaryMessage.length();
         // index+=(blockSize+1),i++) {

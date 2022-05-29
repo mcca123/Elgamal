@@ -51,10 +51,10 @@ public class KeyGen {
         key.put("y", y);
         key.put("u", u);
 
-        // System.out.println("p :" + key.get("p"));
-        // System.out.println("g :" + key.get("g"));
-        // System.out.println("y :" + key.get("y"));
-        // System.out.println("u :" + key.get("u"));
+        System.out.println("p :" + key.get("p"));
+        System.out.println("g :" + key.get("g"));
+        System.out.println("y :" + key.get("y"));
+        System.out.println("u :" + key.get("u"));
 
         return key;
 

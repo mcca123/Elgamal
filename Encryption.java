@@ -13,10 +13,10 @@ public class Encryption {
         String cipherText = Encryption.encrypt("text.txt", "publicKey.txt");
         System.out.println("Cipher Text : " + cipherText);
 
-        // //Decryption
-        System.out.println("==Decryption==");
-        String plain = Encryption.decrypt("cipherText.txt", "privateKey.txt");
-        System.out.println("PlainText :"+ (plain));
+        // // //Decryption
+        // System.out.println("==Decryption==");
+        // String plain = Encryption.decrypt("cipherText.txt", "privateKey.txt");
+        // System.out.println("PlainText :"+ (plain));
 
     }
 
