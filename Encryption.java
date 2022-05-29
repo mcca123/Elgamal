@@ -1,5 +1,6 @@
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -41,6 +42,7 @@ public class Encryption {
         // read Key File
         String[] keyString = FindPrime.readFile(keyFile).split(" ");
         // [] string => [] Long , for calculate
+        System.out.print("keyString"+Arrays.toString(keyString));
         long[] key = Stream.of(keyString).mapToLong(Long::parseLong).toArray();
         // long[] key = Stream.of(FindPrime.readFile(keyFile).split("
         // ")).mapToLong(Long::parseLong).toArray();
@@ -51,6 +53,82 @@ public class Encryption {
         System.out.println("Block Size :" + blockSize);
         // read Plaintext File
         String plaintext = FindPrime.readFile(plaintextFile);
+        String binaryResult = FindPrime.convertStringToBinary(plaintext);
+        System.out.println("Plaintext binary : " + binaryResult);
+        // plaintext length
+        int plainLength = binaryResult.length();
+
+        /// 111 111 000 11
+        String[] plaintextArray = BlockDivide(binaryResult, blockSize);
+        System.out.println("Plaintext Array : " + Arrays.toString(plaintextArray));
+
+        /// 111 111 000 110
+        System.out.println("Plaintext Array After padding : " + Arrays.toString(padding(plaintextArray, blockSize)));
+
+        // Convert string Binary To Decimal 0010 => 2
+        long[] plaintextDecimal = new long[plaintextArray.length];
+        for (int i = 0; i < plaintextArray.length; i++) {
+
+            plaintextDecimal[i] = Long.parseLong(plaintextArray[i], 2);
+
+        }
+
+        System.out.println("==Encryption==");
+        String CipherText = "";
+        String CipherFileName = "CipherText.txt";
+        PrintWriter writerPublic = null;
+        try {
+            writerPublic = new PrintWriter(CipherFileName);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Plaintext Decimal : " + Arrays.toString(plaintextDecimal));
+        System.out.println("public key : " + Arrays.toString(key));
+
+        // Cipher Text A,B
+        for (int i = 0; i < plaintextDecimal.length; i++) {
+            long k = 0;
+            // random K , gcd(k,safeprime = 1)
+            while (FindPrime.gcd(k, key[0] - 1) != 1) {
+                k = 1 + (long) (Math.random() * (key[0]));
+                // System.out.println("k: " + k);
+            }
+
+            // fine A = (g^k) % p
+            long a = FindPrime.fastExponent(key[1], k, key[0]);
+            // fine B = ((y^k) % p * plainText(x)) % p
+            long b = (FindPrime.fastExponent(key[2], k, key[0]) * (plaintextDecimal[i] % key[0])) % key[0];
+            // long[] cipher = { a, b };
+            CipherText += a + " " + b + " ";
+            writerPublic.flush();
+            writerPublic.append(Long.toString(a) + " ");
+            writerPublic.append(Long.toString(b) + " ");
+        }
+        CipherText += Long.toString(plainLength);
+        writerPublic.append(Long.toString(plainLength));
+        writerPublic.close();
+
+        return CipherText;
+
+    }
+
+    // input is file
+    public static String encryptString(String plaintext, String keyFile) {
+
+        // read Key File
+        String[] keyString = FindPrime.readFile(keyFile).split(" ");
+        // [] string => [] Long , for calculate
+        System.out.print("keyString"+Arrays.toString(keyString));
+        long[] key = Stream.of(keyString).mapToLong(Long::parseLong).toArray();
+        // long[] key = Stream.of(FindPrime.readFile(keyFile).split("
+        // ")).mapToLong(Long::parseLong).toArray();
+
+        System.out.println("==Block Split==");
+        // find block size
+        int blockSize = (int) (Math.log(key[0]-1) / Math.log(2));
+        System.out.println("Block Size :" + blockSize);
+    
         String binaryResult = FindPrime.convertStringToBinary(plaintext);
         System.out.println("Plaintext binary : " + binaryResult);
         // plaintext length
