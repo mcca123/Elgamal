@@ -3,35 +3,98 @@ import java.util.stream.Stream;
 
 public class Signature {
     public static void main(String[] args) {
-        long test = (646957948L * 588431087L) % 708294298L;
-        System.out.println("Te:" + test);
+        long[] signature = signature("text.txt", "privateKey.txt");
+        System.out.println("Signature" + Arrays.toString(signature));
+
+        boolean verify =verifying("text.txt", signature, "publicKey.txt");
+        if(verify)System.out.println("Corrected");
+        else System.out.println("IncorrectedKuuu");
 
     }
 
-    public static long[] signature(String message, String keyFile) {
+    public static long[] signature(String plaintextFile, String keyFile) {
         System.out.println("==Signature==");
         String[] keyString = FindPrime.readFile(keyFile).split(" ");
         // [] string => [] Long , for calculate
         long[] key = Stream.of(keyString).mapToLong(Long::parseLong).toArray();
+        System.out.println("Key : " + Arrays.toString(key));
 
         long p = key[0];
         long g = key[1];
         long x = key[2];
 
-        // message is String
-        // String --> long m(base 10)
-        long m = 10;
+        int blockSize = (int) (Math.log(p - 1) / Math.log(2));
+
+        String textString = FindPrime.readFile(plaintextFile);
+        System.out.println("hash value:" + Hash.hashThisString(textString));
+        long[] longHashArray = Signature.BinaryToDecimalArray(Hash.hashThisString(textString), blockSize);
+        long HashValue = 0;
+        for (int i = 0; i < longHashArray.length; i++) {
+            HashValue = (HashValue + longHashArray[i]);
+        }
+        System.out.println("Hash Value" + HashValue);
+
+        // long m = plaintextFile;
+        // System.out.println("mes" + Arrays.toString(longHashArray));
+
+        // long r = 0;
+        // long s = 0;
+        // for (int i = 0; i < longHashArray.length; i++) {
+        // long k = 0;
+        // long tempR;
+        // long temps;
+        // // random K , gcd(k,safeprime = 1)
+        // while (FindPrime.gcd(k, p - 1) != 1) {
+        // k = 1 + (long) (Math.random() * (p - 1));
+        // // System.out.println("k: " + k);
+        // }
+
+        // tempR = FindPrime.fastExponent(g, k, p);
+        // temps = (FindPrime.inverse(p - 1, k) * (longHashArray[i] - ((x * r) % (p -
+        // 1)))) % (p - 1);
+        // // System.out.println("s: " + s);
+        // if (temps < 0) {
+        // temps = (p - 1) + (temps % (p - 1));
+        // }
+        // r += tempR;
+        // s += temps;
+        // System.out.println("k: " + k);
+        // System.out.println("g: " + g);
+        // System.out.println("x: " + x);
+        // System.out.println("p: " + p);
+        // System.out.println("m: " + longHashArray[i]);
+        // System.out.println("r: " + r);
+        // System.out.println("s: " + s);
+        // System.out.println("k-1: " + FindPrime.inverse(p - 1, k));
+        // System.out.println("'---------------------------------'");
+
+        // }
 
         long k = 0;
-        // random K , gcd(k,safeprime-1) = 1
+        // random K , gcd(k,safeprime = 1)
         while (FindPrime.gcd(k, p - 1) != 1) {
             k = 1 + (long) (Math.random() * (p - 1));
             // System.out.println("k: " + k);
         }
 
         long r = FindPrime.fastExponent(g, k, p);
-        long s = FindPrime.inverse(p, k) * (m - (x * r)) % p - 1;
-        long[] signature = { m, r, s };
+        long s = (FindPrime.inverse(p - 1, k) * (HashValue - ((x * r) % (p - 1)))) % (p - 1);
+        System.out.println("s: " + s);
+        if (s < 0) {
+            s = (p - 1) + (s % (p - 1));
+        }
+        System.out.println("k: " + k);
+        System.out.println("g: " + g);
+        System.out.println("x: " + x);
+        System.out.println("p: " + p);
+        System.out.println("m: " + HashValue);
+        System.out.println("r: " + r);
+        System.out.println("s: " + s);
+        System.out.println("k-1: " + FindPrime.inverse(p - 1, k));
+
+        // long[] signature = { m, r, s };
+        long[] signature = { r, s };
+        // System.out.println("signature"+Arrays.toString(signature));
         return signature;
     }
 
@@ -47,6 +110,7 @@ public class Signature {
         long x = key[2];
 
         long m = message;
+        System.out.println("mes" + m);
 
         long k = 0;
         // random K , gcd(k,safeprime = 1)
@@ -74,21 +138,217 @@ public class Signature {
         return signature;
     }
 
-    public static boolean verifying(long[] signature, String keyFile) {
+    // public static long[] signature(long message, String keyFile) {
+    // System.out.println("==Signature==");
+    // String[] keyString = FindPrime.readFile(keyFile).split(" ");
+    // // [] string => [] Long , for calculate
+    // long[] key = Stream.of(keyString).mapToLong(Long::parseLong).toArray();
+    // System.out.println("Key : " + Arrays.toString(key));
+
+    // long p = key[0];
+    // long g = key[1];
+    // long x = key[2];
+
+    // long m = message;
+
+    // long k = 0;
+    // // random K , gcd(k,safeprime = 1)
+    // while (FindPrime.gcd(k, p - 1) != 1) {
+    // k = 1 + (long) (Math.random() * (p - 1));
+    // // System.out.println("k: " + k);
+    // }
+
+    // long r = FindPrime.fastExponent(g, k, p);
+    // long s = (FindPrime.inverse(p - 1, k) * (m - ((x * r) % (p - 1)))) % (p - 1);
+    // System.out.println("s: " + s);
+    // if (s < 0) {
+    // s = (p - 1) + (s % (p - 1));
+    // }
+    // System.out.println("k: " + k);
+    // System.out.println("g: " + g);
+    // System.out.println("x: " + x);
+    // System.out.println("p: " + p);
+    // System.out.println("m: " + m);
+    // System.out.println("r: " + r);
+    // System.out.println("s: " + s);
+    // System.out.println("k-1: " + FindPrime.inverse(p - 1, k));
+
+    // long[] signature = { m, r, s };
+    // return signature;
+    // }
+
+    // public static boolean verifying(long[] signature, String keyFile) {
+    // System.out.println("===Verify===");
+    // String[] keyString = FindPrime.readFile(keyFile).split(" ");
+    // // [] string => [] Long , for calculate
+    // long[] key = Stream.of(keyString).mapToLong(Long::parseLong).toArray();
+    // System.out.println("g: " + key[1]);
+    // System.out.println("x: " + signature[0]);
+    // System.out.println("p: " + key[0]);
+    // System.out.println("y: " + key[2]);
+    // System.out.println("r: " + signature[1]);
+    // System.out.println("s: " + signature[2]);
+
+    // System.out.println("g^x: " + FindPrime.fastExponent(key[1], signature[0],
+    // key[0]));
+    // System.out.println("y^r*r^s : " + (FindPrime.fastExponent(key[2],
+    // signature[1], key[0])
+    // * FindPrime.fastExponent(signature[1], signature[2], key[0]) % key[0]));
+
+    // // System.out.println("a : " + FindPrime.fastExponent(key[1], signature[0],
+    // // key[0]));
+    // // System.out.println("b : " + FindPrime.fastExponent(key[2], signature[1],
+    // // key[0]));
+    // // System.out.println("c : " + FindPrime.fastExponent(signature[1],
+    // // signature[2], key[0]));
+    // // System.out.println("d : " + (FindPrime.fastExponent(key[2], signature[1],
+    // // key[0]) * FindPrime.fastExponent(signature[1], signature[2], key[0]) %
+    // 167));
+
+    // if (FindPrime.fastExponent(key[1], signature[0],
+    // key[0]) == (FindPrime.fastExponent(key[2], signature[1], key[0])
+    // * FindPrime.fastExponent(signature[1], signature[2], key[0]) % key[0]))
+    // return true;
+    // else
+    // return false;
+
+    // }
+
+    // public static boolean verifying(String plaintextFile, long[] signature,
+    // String keyFile) {
+    // System.out.println("===Verify===");
+    // String[] keyString = FindPrime.readFile(keyFile).split(" ");
+    // // [] string => [] Long , for calculate
+    // long[] key = Stream.of(keyString).mapToLong(Long::parseLong).toArray();
+    // long p = key[0];
+    // long g = key[1];
+    // long y = key[2];
+    // long r = signature[0];
+    // long s = signature[1];
+    // System.out.println("g: " + key[1]);
+    // // System.out.println("x: " + signature[0]);
+    // System.out.println("p: " + key[0]);
+    // System.out.println("y: " + key[2]);
+    // System.out.println("r: " + signature[0]);
+    // System.out.println("s: " + signature[1]);
+
+    // int blockSize = (int) (Math.log(p - 1) / Math.log(2));
+
+    // // read message file
+    // String textString = FindPrime.readFile(plaintextFile);
+    // System.out.println("hash value:" + Hash.hashThisString(textString));
+    // long[] longDicimalArray =
+    // Signature.BinaryToDecimalArray(Hash.hashThisString(textString), blockSize);
+
+    // // long m = plaintextFile;
+    // System.out.println("mes" + Arrays.toString(longDicimalArray));
+
+    // // long totaltext = 0;
+    // // for (int i = 0; i < longDicimalArray.length; i++) {
+    // // totaltext =(totaltext+ longDicimalArray[i])%p;
+    // // }
+    // for (int i = 0; i < longDicimalArray.length; i++) {
+    // System.out.println("g^x: " + FindPrime.fastExponent(g, longDicimalArray[i],
+    // p));
+    // System.out.println("y^r*r^s : " + (FindPrime.fastExponent(y, r, p)
+    // * FindPrime.fastExponent(r, s, p) % p));
+    // }
+
+    // //if()
+
+    // // System.out.println("g^x: " + FindPrime.fastExponent(key[1], signature[0],
+    // // key[0]));
+    // // System.out.println("y^r*r^s : " + (FindPrime.fastExponent(key[2],
+    // // signature[1], key[0])
+    // // * FindPrime.fastExponent(signature[1], signature[2], key[0]) % key[0]));
+
+    // // System.out.println("a : " + FindPrime.fastExponent(key[1], signature[0],
+    // // key[0]));
+    // // System.out.println("b : " + FindPrime.fastExponent(key[2], signature[1],
+    // // key[0]));
+    // // System.out.println("c : " + FindPrime.fastExponent(signature[1],
+    // // signature[2], key[0]));
+    // // System.out.println("d : " + (FindPrime.fastExponent(key[2], signature[1],
+    // // key[0]) * FindPrime.fastExponent(signature[1], signature[2], key[0]) %
+    // 167));
+
+    // // if (FindPrime.fastExponent(key[1], signature[0],
+    // // key[0]) == (FindPrime.fastExponent(key[2], signature[1], key[0])
+    // // * FindPrime.fastExponent(signature[1], signature[2], key[0]) % key[0]))
+    // // return true;
+    // // else
+    // // return false;
+    // return true;
+
+    // }
+
+    public static boolean verifying(String plaintextFile, long[] signature, String keyFile) {
         System.out.println("===Verify===");
         String[] keyString = FindPrime.readFile(keyFile).split(" ");
         // [] string => [] Long , for calculate
         long[] key = Stream.of(keyString).mapToLong(Long::parseLong).toArray();
+        long p = key[0];
+        long g = key[1];
+        long y = key[2];
+        long r = signature[0];
+        long s = signature[1];
         System.out.println("g: " + key[1]);
-        System.out.println("x: " + signature[0]);
+        // System.out.println("x: " + signature[0]);
         System.out.println("p: " + key[0]);
         System.out.println("y: " + key[2]);
-        System.out.println("r: " + signature[1]);
-        System.out.println("s: " + signature[2]);
+        System.out.println("r: " + signature[0]);
+        System.out.println("s: " + signature[1]);
 
-        System.out.println("g^x: " + FindPrime.fastExponent(key[1], signature[0], key[0]));
-        System.out.println("y^r*r^s : " + (FindPrime.fastExponent(key[2], signature[1], key[0])
-                * FindPrime.fastExponent(signature[1], signature[2], key[0]) % key[0]));
+        int blockSize = (int) (Math.log(p - 1) / Math.log(2));
+
+        // read message file
+        String textString = FindPrime.readFile(plaintextFile);
+        System.out.println("hash value:" + Hash.hashThisString(textString));
+        long[] longHashArray = Signature.BinaryToDecimalArray(Hash.hashThisString(textString), blockSize);
+
+        // long m = plaintextFile;
+        // System.out.println("mes" + Arrays.toString(longHashArray));
+
+        long HashValue = 0;
+        for (int i = 0; i < longHashArray.length; i++) {
+            HashValue = (HashValue + longHashArray[i]);
+        }
+        System.out.println("Hash Value" + HashValue);
+
+        System.out.println("g^x: " + FindPrime.fastExponent(g, HashValue, p));
+        System.out.println("y^r*r^s : " + (FindPrime.fastExponent(y, r, p)
+                * FindPrime.fastExponent(r, s, p) % p));
+
+        if (FindPrime.fastExponent(g, HashValue, p) == (FindPrime.fastExponent(y, r, p)
+                * FindPrime.fastExponent(r, s, p) % p))
+            return true;
+        else
+            return false;
+
+        // long totaltext = 0;
+        // for (int i = 0; i < longDicimalArray.length; i++) {
+        // totaltext =(totaltext+ longDicimalArray[i])%p;
+        // }
+
+        // for (int i = 0; i < longHashArray.length; i++) {
+        // System.out.println("g^x: " + FindPrime.fastExponent(g, HashValue, p));
+        // System.out.println("y^r*r^s : " + (FindPrime.fastExponent(y, r, p)
+        // * FindPrime.fastExponent(r, s, p) % p));
+        // }
+
+        // for (int i = 0; i < longHashArray.length; i++) {
+        // System.out.println("g^x: " + FindPrime.fastExponent(g, longHashArray[i], p));
+        // System.out.println("y^r*r^s : " + (FindPrime.fastExponent(y, r, p)
+        // * FindPrime.fastExponent(r, s, p) % p));
+        // }
+
+        // if()
+
+        // System.out.println("g^x: " + FindPrime.fastExponent(key[1], signature[0],
+        // key[0]));
+        // System.out.println("y^r*r^s : " + (FindPrime.fastExponent(key[2],
+        // signature[1], key[0])
+        // * FindPrime.fastExponent(signature[1], signature[2], key[0]) % key[0]));
 
         // System.out.println("a : " + FindPrime.fastExponent(key[1], signature[0],
         // key[0]));
@@ -99,12 +359,13 @@ public class Signature {
         // System.out.println("d : " + (FindPrime.fastExponent(key[2], signature[1],
         // key[0]) * FindPrime.fastExponent(signature[1], signature[2], key[0]) % 167));
 
-        if (FindPrime.fastExponent(key[1], signature[0],
-                key[0]) == (FindPrime.fastExponent(key[2], signature[1], key[0])
-                        * FindPrime.fastExponent(signature[1], signature[2], key[0]) % key[0]))
-            return true;
-        else
-            return false;
+        // if (FindPrime.fastExponent(key[1], signature[0],
+        // key[0]) == (FindPrime.fastExponent(key[2], signature[1], key[0])
+        // * FindPrime.fastExponent(signature[1], signature[2], key[0]) % key[0]))
+        // return true;
+        // else
+        // return false;
+        // return true;
 
     }
 

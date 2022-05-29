@@ -78,6 +78,24 @@ public class Main {
                         String plain = Encryption.decrypt(textfilename, keyfilename);
                         // create plaintext
                         System.out.println("PlainText :" + (plain));
+                        case 5:
+                        System.out.println("==Signature==");
+                        System.out.print("input Message filename : ");
+                        textfilename = sc.nextLine();
+                        System.out.print("input Private Key filename : ");
+                        keyfilename = sc.nextLine();
+                        long[] signature = Signature.signature(textfilename, keyfilename);
+                        // create plaintext
+                        System.out.println("Signature :" + Arrays.toString(signature));
+                        case 6:
+                        System.out.println("==Verify==");
+                        System.out.print("input Message filename : ");
+                        textfilename = sc.nextLine();
+                        System.out.print("input Public Key filename : ");
+                        keyfilename = sc.nextLine();
+                        boolean verify = Signature.verifying(textfilename, signature, keyfilename);
+                        // create plaintext
+                        //System.out.println("PlainText :" + (plain));
                     case 7:
                         System.out.println("--------");
                         System.out.println("Goodbye");
