@@ -10,8 +10,8 @@ public class KeyGen {
         long keygen = KeyGenerator(p);
         Map<String, Long> key = GenKey(keygen, p);
         // Map<String, String> keyBinary = KeyTobinary(key);
-        TextFliePublicKey(key);
-        TextFliePrivateKey(key);
+        TextFliePublicKey(key,"PublicKey.txt");
+        TextFliePrivateKey(key,"PublicKey.txt");
 
     }
 
@@ -61,8 +61,8 @@ public class KeyGen {
     }
 
     // convert to text file public Key
-    public static void TextFliePublicKey(Map<String, Long> key) {
-        String fileNamePublic = "publicKey.txt";
+    public static void TextFliePublicKey(Map<String, Long> key,String fileNamePublicKey) {
+        String fileNamePublic = fileNamePublicKey;
 
         PrintWriter writerPublic = null;
 
@@ -80,8 +80,8 @@ public class KeyGen {
     }
 
     // covent to text file private Key
-    public static void TextFliePrivateKey(Map<String, Long> key) {
-        String fileNameSecret = "privateKey.txt";
+    public static void TextFliePrivateKey(Map<String, Long> key,String TextFliePrivateKey) {
+        String fileNameSecret = TextFliePrivateKey;
 
         PrintWriter writerSecret = null;
 
