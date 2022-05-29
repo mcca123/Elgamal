@@ -48,8 +48,18 @@ public class Main {
                         long keygen = KeyGen.KeyGenerator(safePrime);
                         System.out.println("key Generator is " + keygen);
                         Map<String, Long> key = KeyGen.GenKey(keygen, safePrime);
-                        KeyGen.TextFliePublicKey(key);
-                        KeyGen.TextFliePrivateKey(key);
+                        //create Flie for Public Key
+                        System.out.print("input PublicKey file name : ");
+                        String fileNamePublicKey = sc.nextLine();
+                        Encryption.stringToFile(fileNamePublicKey,"");
+                        //key to Flie PublicKey
+                        KeyGen.TextFliePublicKey(key,fileNamePublicKey);
+                        //create Flie for Private Key
+                        System.out.print("input PrivateKey file name : ");
+                        String fileNamePrivateKey = sc.nextLine();
+                        Encryption.stringToFile(fileNamePrivateKey,"");
+                        //key to Flie
+                        KeyGen.TextFliePrivateKey(key,fileNamePrivateKey);
                         break;
                     case 2:
                         System.out.println("==Encryption==");
