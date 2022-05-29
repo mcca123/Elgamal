@@ -1,31 +1,14 @@
 import java.util.Scanner;
-
 import javax.imageio.ImageIO;
-
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import javax.imageio.ImageIO;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+import java.io.ByteArrayInputStream;
+import sun.misc.BASE64Decoder;
+import java.util.Arrays;
 
-
-// import org.apache.commons.codec.binary.Base64;
-
-public class img {
-    public static void main(String[] args) {
-
-        Scanner sc = new Scanner(System.in);
-
-        //inputName
-        System.out.print("input img file name : ");
-        String imgName = sc.nextLine();
-        String base64Img = imgToBase64(imgName);
-        System.out.println(base64Img);
-
-        // String encodedfile = new String(Base64.encodeBase64(bytes), "UTF-8");
-
-
-    }
+public class Img {
     public static String imgToBase64(String imgName){
         String resultantimage = "";
 
@@ -40,4 +23,20 @@ public class img {
 
         return resultantimage;
     }
+
+    public static void decodeToImage(String base64String,String fileName ) {
+          //read Flie
+          String base64 = FindPrime.readFile(base64String);
+      try {
+          BASE64Decoder decoder = new BASE64Decoder();
+          byte[] decodedBytes = decoder.decodeBuffer(base64);
+          System.out.println(Arrays.toString(decodedBytes));
+          
+          BufferedImage image = ImageIO.read(new ByteArrayInputStream(decodedBytes));
+          File f = new File(fileName);
+          ImageIO.write(image, "png", f);
+      } catch (Exception e) {
+          e.printStackTrace();
+      }
+  }
 }

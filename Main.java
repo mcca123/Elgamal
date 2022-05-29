@@ -20,7 +20,8 @@ public class Main {
                 System.out.println("5: Decryption");
                 System.out.println("6: Signature");
                 System.out.println("7: Verify");
-                System.out.println("8: Exit program");
+                System.out.println("8: Base64 to Img");
+                System.out.println("9: Exit program");
                 System.out.println("--------");
                 System.out.printf("input number: ");
                 int i = sc.nextInt();
@@ -95,7 +96,7 @@ public class Main {
                         //inputName
                         System.out.print("input img file name : ");
                         String imgName = sc.nextLine();
-                        String base64Img = img.imgToBase64(imgName);
+                        String base64Img = Img.imgToBase64(imgName);
                         //
                         System.out.print("input Key filename : ");
                         keyfilename = sc.nextLine();
@@ -121,7 +122,7 @@ public class Main {
                         String DecryText = sc.nextLine();
                         Encryption.stringToFile(DecryText,plain);
                         break;
-                        case 6:
+                    case 6:
                         System.out.println("==Signature==");
                         System.out.print("input Message filename : ");
                         textfilename = sc.nextLine();
@@ -131,7 +132,7 @@ public class Main {
                         // create plaintext
                         System.out.println("Signature :" + Arrays.toString(signature));
                         break;
-                        case 7:
+                    case 7:
                         System.out.println("==Verify==");
                         System.out.print("input Message filename : ");
                         textfilename = sc.nextLine();
@@ -141,6 +142,13 @@ public class Main {
                         boolean verify = Signature.verifying(textfilename, longs, keyfilename);
                         break;
                     case 8:
+                        System.out.print("input Base64 file : ");
+                        String base64String = sc.nextLine();
+                        System.out.print("input img filename : ");
+                        String nameImg = sc.nextLine();
+                        Img.decodeToImage(base64String,nameImg);
+                        break;
+                    case 9:
                         System.out.println("--------");
                         System.out.println("Goodbye");
                         System.exit(0);
