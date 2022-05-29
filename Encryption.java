@@ -170,6 +170,18 @@ public class Encryption {
         return word;
     }
 
+    public static void stringToFile(String filename,String plain){
+        try {
+            FileWriter myWriter = new FileWriter(filename);
+            myWriter.write(plain);
+            myWriter.close();
+            System.out.println("Successfully wrote to the file.");
+          } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+          }
+    }
+
     public static String binaryToWord(String BinaryArray[]){
         String tempForJoin = "";
         //10101, 11011, 10101, 11011 => 10101110111010111011

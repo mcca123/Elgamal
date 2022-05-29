@@ -70,6 +70,10 @@ public class Main {
                     String plain = Encryption.decrypt(textfilename, keyfilename);
                     //create plaintext
                     System.out.println("PlainText :" + (plain));
+                    //plinText to Flie
+                    System.out.println("input name File of output plainText => ....txt ");
+                    String DecryText = sc.nextLine();
+                    Encryption.stringToFile(DecryText,plain);
                     break;
                 case 7:
                     System.out.println("--------");
