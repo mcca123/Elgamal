@@ -1,5 +1,7 @@
 import java.util.Arrays;
+import java.util.Scanner;
 import java.util.stream.Stream;
+
 
 public class Signature {
     public static void main(String[] args) {
@@ -13,6 +15,8 @@ public class Signature {
     }
 
     public static long[] signature(String plaintextFile, String keyFile) {
+        Scanner sc = new Scanner(System.in);
+
         System.out.println("==Signature==");
         String[] keyString = FindPrime.readFile(keyFile).split(" ");
         // [] string => [] Long , for calculate
@@ -33,42 +37,6 @@ public class Signature {
             HashValue = (HashValue + longHashArray[i]);
         }
         System.out.println("Hash Value" + HashValue);
-
-        // long m = plaintextFile;
-        // System.out.println("mes" + Arrays.toString(longHashArray));
-
-        // long r = 0;
-        // long s = 0;
-        // for (int i = 0; i < longHashArray.length; i++) {
-        // long k = 0;
-        // long tempR;
-        // long temps;
-        // // random K , gcd(k,safeprime = 1)
-        // while (FindPrime.gcd(k, p - 1) != 1) {
-        // k = 1 + (long) (Math.random() * (p - 1));
-        // // System.out.println("k: " + k);
-        // }
-
-        // tempR = FindPrime.fastExponent(g, k, p);
-        // temps = (FindPrime.inverse(p - 1, k) * (longHashArray[i] - ((x * r) % (p -
-        // 1)))) % (p - 1);
-        // // System.out.println("s: " + s);
-        // if (temps < 0) {
-        // temps = (p - 1) + (temps % (p - 1));
-        // }
-        // r += tempR;
-        // s += temps;
-        // System.out.println("k: " + k);
-        // System.out.println("g: " + g);
-        // System.out.println("x: " + x);
-        // System.out.println("p: " + p);
-        // System.out.println("m: " + longHashArray[i]);
-        // System.out.println("r: " + r);
-        // System.out.println("s: " + s);
-        // System.out.println("k-1: " + FindPrime.inverse(p - 1, k));
-        // System.out.println("'---------------------------------'");
-
-        // }
 
         long k = 0;
         // random K , gcd(k,safeprime = 1)
@@ -94,47 +62,13 @@ public class Signature {
 
         // long[] signature = { m, r, s };
         long[] signature = { r, s };
+
+        String signedMessage = textString +" - " + r + " " + s;
+
+        System.out.print("input signed Message file name : ");
+        String fileNameSigned = sc.nextLine();
+        Encryption.stringToFile(fileNameSigned,signedMessage);
         // System.out.println("signature"+Arrays.toString(signature));
-        return signature;
-    }
-
-    public static long[] signature(long message, String keyFile) {
-        System.out.println("==Signature==");
-        String[] keyString = FindPrime.readFile(keyFile).split(" ");
-        // [] string => [] Long , for calculate
-        long[] key = Stream.of(keyString).mapToLong(Long::parseLong).toArray();
-        System.out.println("Key : " + Arrays.toString(key));
-
-        long p = key[0];
-        long g = key[1];
-        long x = key[2];
-
-        long m = message;
-        System.out.println("mes" + m);
-
-        long k = 0;
-        // random K , gcd(k,safeprime = 1)
-        while (FindPrime.gcd(k, p - 1) != 1) {
-            k = 1 + (long) (Math.random() * (p - 1));
-            // System.out.println("k: " + k);
-        }
-
-        long r = FindPrime.fastExponent(g, k, p);
-        long s = (FindPrime.inverse(p - 1, k) * (m - ((x * r) % (p - 1)))) % (p - 1);
-        System.out.println("s: " + s);
-        if (s < 0) {
-            s = (p - 1) + (s % (p - 1));
-        }
-        System.out.println("k: " + k);
-        System.out.println("g: " + g);
-        System.out.println("x: " + x);
-        System.out.println("p: " + p);
-        System.out.println("m: " + m);
-        System.out.println("r: " + r);
-        System.out.println("s: " + s);
-        System.out.println("k-1: " + FindPrime.inverse(p - 1, k));
-
-        long[] signature = { m, r, s };
         return signature;
     }
 

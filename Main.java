@@ -16,10 +16,11 @@ public class Main {
                 System.out.println("1: Generate Key");
                 System.out.println("2: Encryption File");
                 System.out.println("3: Encryption String");
-                System.out.println("4: Decryption");
-                System.out.println("5: Signature");
-                System.out.println("6: Verify");
-                System.out.println("7: Exit program");
+                System.out.println("4: Encryption image");
+                System.out.println("5: Decryption");
+                System.out.println("6: Signature");
+                System.out.println("7: Verify");
+                System.out.println("8: Exit program");
                 System.out.println("--------");
                 System.out.printf("input number: ");
                 int i = sc.nextInt();
@@ -90,6 +91,23 @@ public class Main {
                         System.out.println("Cipher Text : " + cipherText);
                         break;
                     case 4:
+                        System.out.println("==Encryption==");
+                        //inputName
+                        System.out.print("input img file name : ");
+                        String imgName = sc.nextLine();
+                        String base64Img = img.imgToBase64(imgName);
+                        //
+                        System.out.print("input Key filename : ");
+                        keyfilename = sc.nextLine();
+                        //create Flie for CipherText
+                        System.out.print("input cipher file name : ");
+                        String fileNameImg = sc.nextLine();
+                        Encryption.stringToFile(fileNameImg,"");  
+                        //encryption String
+                        cipherText = Encryption.encryptString(base64Img, keyfilename,fileNameImg);
+                        System.out.println("Cipher Text : " + cipherText);
+                        break;
+                    case 5:
                         System.out.println("==Decryption==");
                         System.out.print("input Ciphertext filename : ");
                         textfilename = sc.nextLine();
@@ -102,7 +120,8 @@ public class Main {
                         System.out.print("input plainText file name : ");
                         String DecryText = sc.nextLine();
                         Encryption.stringToFile(DecryText,plain);
-                        case 5:
+                        break;
+                        case 6:
                         System.out.println("==Signature==");
                         System.out.print("input Message filename : ");
                         textfilename = sc.nextLine();
@@ -111,7 +130,8 @@ public class Main {
                         long[] signature = Signature.signature(textfilename, keyfilename);
                         // create plaintext
                         System.out.println("Signature :" + Arrays.toString(signature));
-                        case 6:
+                        break;
+                        case 7:
                         System.out.println("==Verify==");
                         System.out.print("input Message filename : ");
                         textfilename = sc.nextLine();
@@ -119,8 +139,8 @@ public class Main {
                         keyfilename = sc.nextLine();
                         long [] longs ={1,2} ;
                         boolean verify = Signature.verifying(textfilename, longs, keyfilename);
-                       
-                    case 7:
+                        break;
+                    case 8:
                         System.out.println("--------");
                         System.out.println("Goodbye");
                         System.exit(0);
