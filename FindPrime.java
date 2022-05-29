@@ -45,9 +45,8 @@ public class FindPrime {
 
             // we use While Loop because if textfile have nextLine while loop can fix it
             while (myReader.hasNextLine()) {
-                data += myReader.nextLine();
+                data += myReader.nextLine() + "\n";
             }
-
             // System.out.println("Number of bits is : " + bit);
             myReader.close();
 
