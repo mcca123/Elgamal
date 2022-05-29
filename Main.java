@@ -20,7 +20,7 @@ public class Main {
                 System.out.println("5: Decryption");
                 System.out.println("6: Signature");
                 System.out.println("7: Verify");
-                System.out.println("8: Base64 to Img");
+                System.out.println("8: Decryption image");
                 System.out.println("9: Exit program");
                 System.out.println("--------");
                 System.out.printf("input number: ");
@@ -142,11 +142,22 @@ public class Main {
                         boolean verify = Signature.verifying(textfilename, longs, keyfilename);
                         break;
                     case 8:
-                        System.out.print("input Base64 file : ");
-                        String base64String = sc.nextLine();
+                        System.out.println("==Decryption==");
+                        System.out.print("input Ciphertext filename : ");
+                        textfilename = sc.nextLine();
+                        System.out.print("input Key filename : ");
+                        keyfilename = sc.nextLine();
+                        String plainImg = Encryption.decrypt(textfilename, keyfilename);
+                         // create plaintext
+                        //System.out.println("PlainText :" + (plain));
+                        //plinText to Flie
+                        System.out.print("input plainText file name : ");
+                        String DecryTextImg = sc.nextLine();
+                        Encryption.stringToFile(DecryTextImg,plainImg);
+                        //Base64 to Img
                         System.out.print("input img filename : ");
                         String nameImg = sc.nextLine();
-                        Img.decodeToImage(base64String,nameImg);
+                        Img.decodeToImage(DecryTextImg,nameImg);
                         break;
                     case 9:
                         System.out.println("--------");
