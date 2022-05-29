@@ -25,11 +25,9 @@ public class Img {
     }
 
     public static void decodeToImage(String base64String,String fileName ) {
-          //read Flie
-          String base64 = FindPrime.readFile(base64String);
       try {
           BASE64Decoder decoder = new BASE64Decoder();
-          byte[] decodedBytes = decoder.decodeBuffer(base64);
+          byte[] decodedBytes = decoder.decodeBuffer(base64String);
           System.out.println(Arrays.toString(decodedBytes));
           
           BufferedImage image = ImageIO.read(new ByteArrayInputStream(decodedBytes));

@@ -148,16 +148,10 @@ public class Main {
                         System.out.print("input Key filename : ");
                         keyfilename = sc.nextLine();
                         String plainImg = Encryption.decrypt(textfilename, keyfilename);
-                         // create plaintext
-                        //System.out.println("PlainText :" + (plain));
-                        //plinText to Flie
-                        System.out.print("input plainText file name : ");
-                        String DecryTextImg = sc.nextLine();
-                        Encryption.stringToFile(DecryTextImg,plainImg);
                         //Base64 to Img
                         System.out.print("input img filename : ");
                         String nameImg = sc.nextLine();
-                        Img.decodeToImage(DecryTextImg,nameImg);
+                        Img.decodeToImage(plainImg,nameImg);
                         break;
                     case 9:
                         System.out.println("--------");
