@@ -20,8 +20,9 @@ public class Main {
                 System.out.println("5: Decryption");
                 System.out.println("6: Signature");
                 System.out.println("7: Verify");
-                System.out.println("8: Decryption image");
-                System.out.println("9: Exit program");
+                System.out.println("8: Verify + Decryption");
+                System.out.println("9: Decryption image");
+                System.out.println("0: Exit program");
                 System.out.println("--------");
                 System.out.printf("input number: ");
                 int i = sc.nextInt();
@@ -50,18 +51,18 @@ public class Main {
                         long keygen = KeyGen.KeyGenerator(safePrime);
                         System.out.println("key Generator is " + keygen);
                         Map<String, Long> key = KeyGen.GenKey(keygen, safePrime);
-                        //create Flie for Public Key
+                        // create Flie for Public Key
                         System.out.print("input PublicKey file name : ");
                         String fileNamePublicKey = sc.nextLine();
-                        Encryption.stringToFile(fileNamePublicKey,"");
-                        //key to Flie PublicKey
-                        KeyGen.TextFliePublicKey(key,fileNamePublicKey);
-                        //create Flie for Private Key
+                        Encryption.stringToFile(fileNamePublicKey, "");
+                        // key to Flie PublicKey
+                        KeyGen.TextFliePublicKey(key, fileNamePublicKey);
+                        // create Flie for Private Key
                         System.out.print("input PrivateKey file name : ");
                         String fileNamePrivateKey = sc.nextLine();
-                        Encryption.stringToFile(fileNamePrivateKey,"");
-                        //key to Flie
-                        KeyGen.TextFliePrivateKey(key,fileNamePrivateKey);
+                        Encryption.stringToFile(fileNamePrivateKey, "");
+                        // key to Flie
+                        KeyGen.TextFliePrivateKey(key, fileNamePrivateKey);
                         break;
                     case 2:
                         System.out.println("==Encryption==");
@@ -69,11 +70,11 @@ public class Main {
                         String textfilename = sc.nextLine();
                         System.out.print("input Key filename : ");
                         String keyfilename = sc.nextLine();
-                        //create Flie for CipherText
+                        // create Flie for CipherText
                         System.out.print("input cipher file name : ");
                         String fileNameFile = sc.nextLine();
-                        Encryption.stringToFile(fileNameFile,"");  
-                        //encryption Flie
+                        Encryption.stringToFile(fileNameFile, "");
+                        // encryption Flie
                         cipherText = Encryption.encrypt(textfilename, keyfilename, fileNameFile);
                         System.out.println("Cipher Text : " + cipherText);
                         break;
@@ -83,29 +84,29 @@ public class Main {
                         String textString = sc.nextLine();
                         System.out.print("input Key filename : ");
                         keyfilename = sc.nextLine();
-                        //create Flie for CipherText
+                        // create Flie for CipherText
                         System.out.print("input cipher file name : ");
                         String fileNameString = sc.nextLine();
-                        Encryption.stringToFile(fileNameString,"");  
-                        //encryption String
-                        cipherText = Encryption.encryptString(textString, keyfilename,fileNameString);
+                        Encryption.stringToFile(fileNameString, "");
+                        // encryption String
+                        cipherText = Encryption.encryptString(textString, keyfilename, fileNameString);
                         System.out.println("Cipher Text : " + cipherText);
                         break;
                     case 4:
                         System.out.println("==Encryption==");
-                        //inputName
+                        // inputName
                         System.out.print("input img file name : ");
                         String imgName = sc.nextLine();
                         String base64Img = Img.imgToBase64(imgName);
                         //
                         System.out.print("input Key filename : ");
                         keyfilename = sc.nextLine();
-                        //create Flie for CipherText
+                        // create Flie for CipherText
                         System.out.print("input cipher file name : ");
                         String fileNameImg = sc.nextLine();
-                        Encryption.stringToFile(fileNameImg,"");  
-                        //encryption String
-                        cipherText = Encryption.encryptString(base64Img, keyfilename,fileNameImg);
+                        Encryption.stringToFile(fileNameImg, "");
+                        // encryption String
+                        cipherText = Encryption.encryptString(base64Img, keyfilename, fileNameImg);
                         System.out.println("Cipher Text : " + cipherText);
                         break;
                     case 5:
@@ -115,12 +116,12 @@ public class Main {
                         System.out.print("input Key filename : ");
                         keyfilename = sc.nextLine();
                         String plain = Encryption.decrypt(textfilename, keyfilename);
-                         // create plaintext
-                        //System.out.println("PlainText :" + (plain));
-                        //plinText to Flie
+                        // create plaintext
+                        // System.out.println("PlainText :" + (plain));
+                        // plinText to Flie
                         System.out.print("input plainText file name : ");
-                        String DecryText = sc.nextLine();
-                        Encryption.stringToFile(DecryText,plain);
+                        String DecryptText = sc.nextLine();
+                        Encryption.stringToFile(DecryptText, plain);
                         break;
                     case 6:
                         System.out.println("==Signature==");
@@ -141,18 +142,26 @@ public class Main {
                         boolean verify = Signature.verifying(textfilename, keyfilename);
                         break;
                     case 8:
+                        System.out.println("==Verify==");
+                        System.out.print("input Message filename : ");
+                        textfilename = sc.nextLine();
+                        System.out.print("input Public Key filename : ");
+                        keyfilename = sc.nextLine();
+                        Signature.verifyingDecypt(textfilename, keyfilename);
+                        break;
+                    case 9:
                         System.out.println("==Decryption==");
                         System.out.print("input Ciphertext filename : ");
                         textfilename = sc.nextLine();
                         System.out.print("input Key filename : ");
                         keyfilename = sc.nextLine();
                         String plainImg = Encryption.decrypt(textfilename, keyfilename);
-                        //Base64 to Img
+                        // Base64 to Img
                         System.out.print("input img filename : ");
                         String nameImg = sc.nextLine();
-                        Img.decodeToImage(plainImg,nameImg);
+                        Img.decodeToImage(plainImg, nameImg);
                         break;
-                    case 9:
+                    case 0:
                         System.out.println("--------");
                         System.out.println("Goodbye");
                         System.exit(0);

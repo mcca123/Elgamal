@@ -117,6 +117,61 @@ public class Signature {
         }
     }
 
+
+    public static boolean verifyingDecypt(String plaintextFile, String keyFile) {
+        System.out.println("===Verify===");
+        String[] keyString = FindPrime.readFile(keyFile).split(" ");
+        // [] string => [] Long , for calculate
+        long[] key = Stream.of(keyString).mapToLong(Long::parseLong).toArray();
+        long p = key[0];
+        long g = key[1];
+        long y = key[2];
+
+        int blockSize = (int) (Math.log(p - 1) / Math.log(2));
+
+        // read signed message file
+        String textString = FindPrime.readFile(plaintextFile);
+        String message = textString.substring(0, textString.lastIndexOf(' '));
+        System.out.println("tet:" + message);
+        long r = Long.parseLong(message.substring(message.lastIndexOf(' ') + 1));
+        message = message.substring(0, message.lastIndexOf(' '));
+        long s = Long.parseLong(textString.substring(textString.lastIndexOf(' ') + 1));
+        System.out.println("r: " + r);
+        System.out.println("s: " + s);
+
+        System.out.println("signature: " + r + " " + s);
+        System.out.println("Message: " + message);
+        Scanner sc = new Scanner(System.in);
+        System.out.print("input key for decypt: ");
+        String keyfile = sc.nextLine();
+        String plaintext =Encryption.decryptString(message, keyfile);
+        System.out.print("input plainText file name : ");
+                        String DecryText = sc.nextLine();
+                        Encryption.stringToFile(DecryText, plaintext);
+
+        long[] longHashArray = Signature.BinaryToDecimalArray(Hash.hashThisString(message), blockSize);
+
+        long HashValue = 0;
+        for (int i = 0; i < longHashArray.length; i++) {
+            HashValue = (HashValue + longHashArray[i]);
+        }
+        System.out.println("Hash Value: " + HashValue);
+
+        System.out.println("g^x: " + FindPrime.fastExponent(g, HashValue, p));
+        System.out.println("y^r*r^s : " + (FindPrime.fastExponent(y, r, p)
+                * FindPrime.fastExponent(r, s, p) % p));
+
+                
+        if (FindPrime.fastExponent(g, HashValue, p) == (FindPrime.fastExponent(y, r, p)
+                * FindPrime.fastExponent(r, s, p) % p)) {
+            System.out.println("Correct");
+            return true;
+        } else {
+            System.out.println("Incorrect");
+            return false;
+        }
+    }
+
     public static long[] BinaryToDecimalArray(String BinaryMessage, long blockSize) {
         // pad
         long pad = BinaryMessage.length() % blockSize;
