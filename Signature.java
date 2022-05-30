@@ -142,7 +142,7 @@ public class Signature {
         System.out.println("signature: " + r + " " + s);
         System.out.println("Message: " + message);
         Scanner sc = new Scanner(System.in);
-        System.out.print("input key for decypt: ");
+        System.out.print("input key file name for decypt: ");
         String keyfile = sc.nextLine();
         String plaintext =Encryption.decryptString(message, keyfile);
         System.out.print("input plainText file name : ");

@@ -12,7 +12,7 @@ public class Main {
     public static void main(String[] args) {
         try (Scanner sc = new Scanner(System.in)) {
             while (true) {
-                System.out.println("Select 1, 2, 3, 4, 5 or 6");
+                System.out.println("Select 1, 2, 3, 4, 5, 6, 7, 8, 9 or 0");
                 System.out.println("1: Generate Key");
                 System.out.println("2: Encryption File");
                 System.out.println("3: Encryption String");
