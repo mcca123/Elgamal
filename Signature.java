@@ -145,9 +145,6 @@ public class Signature {
         System.out.print("input key file name for decypt: ");
         String keyfile = sc.nextLine();
         String plaintext =Encryption.decryptString(message, keyfile);
-        System.out.print("input plainText file name : ");
-                        String DecryText = sc.nextLine();
-                        Encryption.stringToFile(DecryText, plaintext);
 
         long[] longHashArray = Signature.BinaryToDecimalArray(Hash.hashThisString(message), blockSize);
 
@@ -165,6 +162,22 @@ public class Signature {
         if (FindPrime.fastExponent(g, HashValue, p) == (FindPrime.fastExponent(y, r, p)
                 * FindPrime.fastExponent(r, s, p) % p)) {
             System.out.println("Correct");
+            //itImg?
+            System.out.println("if txt = 0 | if img = 1 : ");
+            int isImg = sc.nextInt();
+            sc.nextLine();
+            if(isImg == 1){
+                // Base64 to Img
+                System.out.print("input img filename : ");
+                String nameImg = sc.nextLine();
+                Img.decodeToImage(plaintext, nameImg);
+            }else if(isImg == 0){
+                // txt to Flie
+                System.out.print("input plainText file name : ");
+                String DecryText = sc.nextLine();
+                Encryption.stringToFile(DecryText, plaintext);
+            }
+
             return true;
         } else {
             System.out.println("Incorrect");
