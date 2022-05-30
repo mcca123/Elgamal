@@ -4,14 +4,14 @@ import java.util.stream.Stream;
 
 public class Signature {
     // public static void main(String[] args) {
-    //     long[] signature = signature("text.txt", "privateKey.txt");
-    //     System.out.println("Signature" + Arrays.toString(signature));
+    // long[] signature = signature("text.txt", "privateKey.txt");
+    // System.out.println("Signature" + Arrays.toString(signature));
 
-    //     boolean verify = verifying("text.txt", "publicKey.txt");
-    //     if (verify)
-    //         System.out.println("Corrected");
-    //     else
-    //         System.out.println("Incorrected");
+    // boolean verify = verifying("text.txt", "publicKey.txt");
+    // if (verify)
+    // System.out.println("Corrected");
+    // else
+    // System.out.println("Incorrected");
 
     // }
 
@@ -38,7 +38,7 @@ public class Signature {
         for (int i = 0; i < longHashArray.length; i++) {
             HashValue = (HashValue + longHashArray[i]);
         }
-        System.out.println("Hash Value" + HashValue);
+        System.out.println("Hash Value: " + HashValue);
 
         long k = 0;
         // random K , gcd(k,safeprime = 1)
@@ -49,7 +49,6 @@ public class Signature {
 
         long r = FindPrime.fastExponent(g, k, p);
         long s = (FindPrime.inverse(p - 1, k) * (HashValue - ((x * r) % (p - 1)))) % (p - 1);
-        System.out.println("s: " + s);
         if (s < 0) {
             s = (p - 1) + (s % (p - 1));
         }
@@ -62,16 +61,13 @@ public class Signature {
         // System.out.println("s: " + s);
         // System.out.println("k-1: " + FindPrime.inverse(p - 1, k));
 
-        // long[] signature = { m, r, s };
         long[] signature = { r, s };
 
-        String signedMessage = textString + "-" + r + " " + s;
+        String signedMessage = textString + " " + r + " " + s;
 
         System.out.print("input signed Message file name : ");
         String fileNameSigned = sc.nextLine();
         Encryption.stringToFile(fileNameSigned, signedMessage);
-        // System.out.println("signature"+Arrays.toString(signature));
-        sc.close();
         return signature;
     }
 
@@ -88,14 +84,18 @@ public class Signature {
 
         // read signed message file
         String textString = FindPrime.readFile(plaintextFile);
-        String[] textArray = textString.split("-");
-        String[] signature = textArray[1].split(" ");
-        System.out.println("signature: " + Arrays.toString(signature));
-        long r = Long.parseLong(signature[0]);
-        long s = Long.parseLong(signature[1]);
-        System.out.println("Message: " + textArray[0]);
+        String message = textString.substring(0, textString.lastIndexOf(' '));
+        System.out.println("tet:" + message);
+        long r = Long.parseLong(message.substring(message.lastIndexOf(' ') + 1));
+        message = message.substring(0, message.lastIndexOf(' '));
+        long s = Long.parseLong(textString.substring(textString.lastIndexOf(' ') + 1));
+        System.out.println("r: " + r);
+        System.out.println("s: " + s);
 
-        long[] longHashArray = Signature.BinaryToDecimalArray(Hash.hashThisString(textArray[0]), blockSize);
+        System.out.println("signature: " + r + " " + s);
+        System.out.println("Message: " + message);
+
+        long[] longHashArray = Signature.BinaryToDecimalArray(Hash.hashThisString(message), blockSize);
 
         long HashValue = 0;
         for (int i = 0; i < longHashArray.length; i++) {

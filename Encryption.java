@@ -194,13 +194,14 @@ public class Encryption {
         String[] cipherArray = FindPrime.readFile(cipherText).split(" ");
         // []String => []Long
         long[] cipherArrayL = Stream.of(cipherArray).mapToLong(Long::parseLong).toArray();
-        System.out.println("cipher text : " + Arrays.toString(cipherArray));
+        System.out.println("cipher text : " + Arrays.toString(cipherArrayL));
         //find binary text length
         int plaintLength = (int) cipherArrayL[cipherArrayL.length - 1];
         long[] cipherLongArray = new long[cipherArrayL.length-1];
-        for (int i = 0; i < cipherArrayL.length; i++) {
+        for (int i = 0; i < cipherLongArray.length; i++) {
             cipherLongArray[i] = cipherArrayL[i];
         }
+        System.out.println("cipherLongArray: "+Arrays.toString(cipherLongArray));
 
         // string [] key = read keyflie
         String[] key = FindPrime.readFile(keyfile).split(" ");
@@ -218,8 +219,8 @@ public class Encryption {
         // find plain text
         for (int i = 0, j = 0; j < plaintext.length; i += 2, j++) {
             // Plaintext[base10] = (B / (A ^ U)) % P => (B * (A ^ (P - 1 - U))) % P
-            plaintext[j] = (FindPrime.fastExponent(cipherArrayL[i], (keyLong[0] - 1 - keyLong[2]), keyLong[0])
-                    * cipherArrayL[i + 1]) % keyLong[0];
+            plaintext[j] = (FindPrime.fastExponent(cipherLongArray[i], (keyLong[0] - 1 - keyLong[2]), keyLong[0])
+                    * cipherLongArray[i + 1]) % keyLong[0];
             //long[base10] --> String[base2]
             //delete 0 by itSelf
             BinaryArray[j] = Long.toBinaryString(plaintext[j]);
@@ -251,6 +252,7 @@ public class Encryption {
         BinaryArray[lastBlock] = BinaryArray[lastBlock].substring(0, blockSize - lengthPadding);
         System.out.println("after delete padding : " + Arrays.toString(BinaryArray));
         String word = binaryToWord(BinaryArray);
+        System.out.println("word= "+word);
         return word;
     }
 
@@ -271,11 +273,13 @@ public class Encryption {
         String resultWord = String.join(tempForJoin,BinaryArray);
         System.out.println("Binary text without separator : " + resultWord);
         //10101110111010111011 => 1010111011 1010111011
-        resultWord = SubStringByBlock(resultWord,8," ");
-        System.out.println("Binary text with separ : " + resultWord);
+        // resultWord = SubStringByBlock(resultWord,8," ");
+        // System.out.println("Binary text with separ : " + resultWord);
         //01101101 => m
         String plainText = "";
-            for(int index = 0; index < resultWord.length(); index+=9) {
+        while(resultWord.length()%8!=0){resultWord +="0";}
+        System.out.println("resultWord: "+resultWord);
+            for(int index = 0; index < resultWord.length(); index+=8) {
                 String temp = resultWord.substring(index, index+8);
                 int num = Integer.parseInt(temp,2);
                 char letter = (char) num;
