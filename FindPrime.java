@@ -47,7 +47,7 @@ public class FindPrime {
             while (myReader.hasNextLine()) {
                 data += myReader.nextLine();
                 if (myReader.hasNextLine()) {
-                    data += "\n";
+                    data += "\r\n";
                 }
             }
             myReader.close();

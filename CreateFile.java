@@ -3,8 +3,9 @@ import java.io.IOException;
 
 public class CreateFile {
     public static void main(String[] args) {
-        String filename = "a.txt";
-        String text = "mcca\ndasda\ndas\n*-*";
+        String filename = "b.txt";
+        String text = FindPrime.readFile("plaintext.txt");
+        //String text = "mcca\ndasda\ndas\n*-*";
         stringToFile(filename, text);
     }
     public static void stringToFile(String filename,String text){
